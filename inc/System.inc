@@ -1,0 +1,7 @@
+cextern ScreenWidth
+cextern ScreenHeight
+
+cextern _imp__Sleep
+cextern _imp__GetSystemMetrics
+
+cextern _imp__MultiByteToWideChar

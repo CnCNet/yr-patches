@@ -1,0 +1,3 @@
+cextern StatisticsPacketSent
+cextern PlanetWestwoodStartTime
+cextern GameStockKeepingUnit

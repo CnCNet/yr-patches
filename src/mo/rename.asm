@@ -1,0 +1,58 @@
+%include "macros/patch.inc"
+
+;Rename application title
+@SET 0x00849F48, {db "Mental Omega", 0}
+
+@SET 0x0082668C, {db "EXPANDMO%02d.MIX", 0}
+
+@SET 0x0082621C, {db "AIMO.INI", 0}
+
+@SET 0x00826254, {db "ARTMO.INI", 0}
+
+@SET 0x00826198, {db "BATTLEMO.INI", 0}
+
+@SET 0x008261A8, {db "BATTLEMO*.INI", 0}
+
+@SET 0x008295E8, {db "%sMO.INI", 0}
+
+@SET 0x00825DF0, {db "EVAMO.INI", 0}
+
+@SET 0x00830370, {db "MAPSELMO.INI", 0}
+
+@SET 0x00839724, {db "MISSIONMO.INI", 0}
+
+@SET 0x00826260, {db "RULESMO.INI", 0}
+
+@SET 0x0082626C, {db "RULEMO*.INI", 0}
+
+@SET 0x00825E50, {db "SOUNDMO.INI", 0}
+
+@SET 0x0081C24C, {db "THEMEMO.MIX", 0}
+
+@SET 0x00825D94, {db "THEMEMO.INI", 0}
+
+@SET 0x00826444, {db "RA2MO.INI", 0}
+
+@SET 0x00826614, {db "EMOCAL*.MIX", 0}
+
+@SET 0x00826620, {db "EMOCHE*.MIX", 0}
+
+@SET 0x0081C284, {db "MULTIMO.MIX", 0}
+
+@SET 0x00826780, {db "MULTIMO.MIX", 0}
+
+@SET 0x0081C2EC, {db "MAPSMO%02d.MIX", 0}
+
+@SET 0x0082679C, {db "MAPSMO*.MIX", 0}
+
+@SET 0x0081C210, {db "MOVMO%02d.MIX", 0}
+@SET 0x008266A0, {db "MIXFILES\\MOVMO03.MIX", 0}
+@SET 0x008266B8, {db "MOVMO03.MIX", 0}
+@SET 0x008266C4, {db "MIXFILES\\MOVMO*.MIX", 0}
+@SET 0x008266D8, {db "MIXFILES\\MOVMO01.MIX", 0}
+@SET 0x008266F0, {db "MOVMO01.MIX", 0}
+@SET 0x00826748, {db "MOVMO*.MIX", 0}
+
+@SET 0x0081CE18, {db "TAPLEL.SHP", 0}
+
+;@SET 0x00830A18, {db "MPModesMO.ini", 0} //commented out for now until next major MO update, else crashes
