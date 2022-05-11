@@ -297,6 +297,7 @@ signed int Initialize_Spawn()
         INIClass__GetString(&INIClass_SPAWN, "Settings", "Scenario", "", &ScenarioName, 32);
         if ( INIClass__GetBool(&INIClass_SPAWN, "Settings", "IsSinglePlayer", 0) )
         {
+			Crates = true;
             SessionType = 0;
         }
 
