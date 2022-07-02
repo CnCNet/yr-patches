@@ -79,10 +79,11 @@ ifdef STATS
 	SPAWNER_OBJS += src/statistics.o
 endif
 
-EXTERN_DIRS = $(shell find src/extern/ -maxdepth 1 -type d)
-EXTERN_FILES = $(foreach dir,$(EXTERN_DIRS),$(wildcard $(dir)/Makefile))
-
--include $(EXTERN_FILES)
+ifeq (src/extern, $(wildcard src/extern))
+        EXTERN_DIRS = $(shell find src/extern/ -maxdepth 1 -type d)
+        EXTERN_FILES = $(foreach dir,$(EXTERN_DIRS),$(wildcard $(dir)/Makefile))
+        -include $(EXTERN_FILES)
+endif
 
 ifdef WWDEBUG
 	NFLAGS += -D WWDEBUG
