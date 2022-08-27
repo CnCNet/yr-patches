@@ -67,7 +67,6 @@ SPAWNER_OBJS = \
                 src/spawner/protocol_zero.o \
                 src/spawner/random_map.o \
 
-EXTERN_OBJS =
 
 ifdef SPAWNER
         CFLAGS += -DSPAWNER=1
@@ -78,11 +77,6 @@ ifdef STATS
         CFLAGS += -DSTATS=1
 	SPAWNER_OBJS += src/statistics.o
 endif
-
-EXTERN_DIRS = $(shell find src/extern/ -maxdepth 1 -type d)
-EXTERN_FILES = $(foreach dir,$(EXTERN_DIRS),$(wildcard $(dir)/Makefile))
-
--include $(EXTERN_FILES)
 
 ifdef WWDEBUG
 	NFLAGS += -D WWDEBUG
@@ -108,8 +102,6 @@ DLL_OBJS = src/ares.o \
            src/custom_connection_timeout.o \
 
 MO_OBJS = src/mo/rename.o
-
-OBJS += $(EXTERN_OBJS)
 
 PETOOL     ?= petool
 STRIP      ?= strip
