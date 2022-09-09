@@ -721,52 +721,6 @@ hack 0x007AFB03
 
 
 
-;;; Observer.pal
-hack 0x0072F2E9, 0x0072F2EF
-    cmp byte[Ra2Mode], 0
-    jz  .Reg
-
-    mov  ecx, 0x00844BF0
-    jmp  hackend
-
- .Reg:
-    mov  ecx, 0x00844C04
-    jmp  hackend
-
-hack 0x0072F3DF, 0x0072F3E5
-    cmp byte[Ra2Mode], 0
-    jz  .Reg
-
-    mov  ecx, [0x00844BF0]
-    jmp  hackend
-
- .Reg:
-    mov  ecx, [0x00844C04]
-    jmp  hackend
-
-hack 0x0072FC34, 0x0072FC3A
-    cmp byte[Ra2Mode], 0
-    jz  .Reg
-
-    mov  ecx, [0x00844BF0]
-    jmp  hackend
-
- .Reg:
-    mov  ecx, [0x00844C04]
-    jmp  hackend
-
-hack 0x007306E9, 0x007306EF
-    cmp byte[Ra2Mode], 0
-    jz  .Reg
-
-    mov  ecx, [0x00844BF0]
-    jmp  hackend
-
- .Reg:
-    mov  ecx, [0x00844C04]
-    jmp  hackend
-
-
 
 StringZ BUILDINGZ_SHP, "BUILDNGZ.SHP"
 ;;; BuildingZ.shp
