@@ -158,6 +158,8 @@ setcglob 0x00A8B23C, GameMode
 setcglob 0x008871E0, RulesData
 
 setcglob 0x0061f210, Game_LoadPCXFiles
+setcglob 0x00600560, InitCommonDialogStuff
+setcglob 0x0061F190, InitUIColorShifts
 setcglob 0x0052F620, Parse_Command_Line
 
 ;CCHyper 18.06.2015

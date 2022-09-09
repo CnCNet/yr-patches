@@ -133,6 +133,8 @@ void __thiscall More_Alliances_Crap(void* house, void *other, bool maybe)
 
 void Init_Random();
 void Init_Network();
+void InitCommonDialogStuff();
+void InitUIColorShifts();
 void Game_LoadPCXFiles();
 void Load_Sides_Stuff();
 void __fastcall GScreenClass__Do_Blit(char a1, void *surface, int32_t a3);
@@ -327,6 +329,8 @@ signed int Initialize_Spawn()
 
         Load_Sides_Stuff();
 
+        InitCommonDialogStuff();
+        InitUIColorShifts();
         Game_LoadPCXFiles();
 
         GameMode = Set_Game_Mode(INIClass__GetInt(&INIClass_SPAWN, "Settings", "GameMode", 1));          // correct
