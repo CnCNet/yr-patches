@@ -1,6 +1,6 @@
 -include config.mk
 
-INPUT       = gamemd.exe
+INPUT       = gamemd.dat
 OUTPUT      = gamemd-cncnet.exe
 LDS         = gamemd.lds
 IMPORTS     = 0x40F0E0 320

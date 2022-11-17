@@ -6,12 +6,12 @@ ENTRY(start);
 
 SECTIONS
 {
-    .text      0x401000        : { gamemd.exe(.text) }
-    .rdata     0x7E1000        : { gamemd.exe(.rdata) }
-    .data      0x812000        : { gamemd.exe(.data); . = ALIGN(0x1000); }
+    .text      0x401000        : { gamemd.dat(.text) }
+    .rdata     0x7E1000        : { gamemd.dat(.rdata) }
+    .data      0x812000        : { gamemd.dat(.data); . = ALIGN(0x1000); }
     .bss       ALIGN(0x1000)   : { . = + 0x2FBBE4; }
 
-    /DISCARD/                  : { gamemd.exe(.rsrc) }
+    /DISCARD/                  : { gamemd.dat(.rsrc) }
 
     .idata       ALIGN(0x1000) : { *(.idata); }
 
