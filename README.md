@@ -1,4 +1,4 @@
-Westwood RTS Engine 2
+Red Alert 2 - Yuri's Revenge
 ================================================================================
 Random enhancements and bug fixes for Command and Conquer: Red Alert 2 - Yuri's Revenge
 
@@ -77,5 +77,6 @@ Credits
  - Hifi
  - Iran
  - CCHyper
+ - tomsons26
  - dkeeton
  - Sonarpulse
