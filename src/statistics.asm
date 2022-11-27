@@ -29,8 +29,11 @@ str_NKEY db "NKEY",0
 str_SKEY db "SKEY",0
 
 section .data
-str_ALY db "ALY0",0
+str_ALY db "ALYx",0
 alyID equ str_ALY+3
+
+str_BSP db "BSPx",0
+bspID equ str_BSP+3
 
 cextern MapHash
 cextern UIMapName
@@ -200,28 +203,47 @@ AddMyIdField:
 
 ;///////////////////////////////////////////////////////////////////////////////
 ;// Adds ALY field
+;// Adds BSP field
 ;//
 ;///////////////////////////////////////////////////////////////////////////////
-hack 0x006C7976
-        call 0x004CB760             ;FieldClass::FieldClass(char *, DWORD)
-        push eax
-        lea  ecx, [esp+0x14]
+hack 0x006C7984
         call 0x00625AE0             ;PacketClass::Add_Field
 
-        mov  edi, [esi+0x5788]             ;HouseClass::AllyBitfield
         mov  cl, byte[0x00841F43]
         mov  byte[alyID], cl
+        mov  byte[bspID], cl
+
         push 0x10
         call new
-
         add  esp,4
         test eax, eax
-        jz   0x006C797D
+        jz   hackend
 
+        mov  edi, [esi+0x5788]      ;HouseClass::AllyBitfield
         push edi
         push str_ALY
         mov  ecx, eax
         call 0x004CB760             ;FieldClass::FieldClass(char *, DWORD)
+
+        push eax
+        lea  ecx, [esp+0x14]        ;pPacket
+        call 0x00625AE0             ;PacketClass::Add_Field
+
+        push 0x10
+        call new
+        add  esp,4
+        test eax, eax
+        jz   hackend
+
+        mov  edi, [esi+0x5490]      ;HouseClass::BaseSpawnCell
+        push edi
+        push str_BSP
+        mov  ecx, eax
+        call 0x004CB760             ;FieldClass::FieldClass(char *, DWORD)
+
+        push eax
+        lea  ecx, [esp+0x14]        ;pPacket
+        call 0x00625AE0             ;PacketClass::Add_Field
 
         jmp  hackend
 
