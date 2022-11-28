@@ -235,8 +235,22 @@ hack 0x006C7984
         test eax, eax
         jz   hackend
 
-        mov  edi, [esi+0x5490]      ;HouseClass::BaseSpawnCell
-        push edi
+        push eax
+        mov  eax, [0x00A8B230]      ;Scenario
+        mov  ecx, 0
+.loop:
+        mov  edi, [eax+ecx*4+0x632] ;Scenario->Waypoints[i]
+        cmp  edi, [esi+0x5490]      ;HouseClass::BaseSpawnCell
+        jz   .endloop
+
+        inc  cl
+        cmp  cl, 8
+        jl   .loop
+
+.endloop:
+        pop  eax
+
+        push ecx
         push str_BSP
         mov  ecx, eax
         call 0x004CB760             ;FieldClass::FieldClass(char *, DWORD)
