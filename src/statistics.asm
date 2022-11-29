@@ -229,16 +229,25 @@ hack 0x006C7984
         lea  ecx, [esp+0x14]        ;pPacket
         call 0x00625AE0             ;PacketClass::Add_Field
 
+
+        mov  edi, 0
+.loop:
+        mov  ecx, edi
+        add  ecx, 4475              ;HouseClass::PlayerAtA
+        call 0x00510ED0             ;PlayerAtToHouseClass
+        cmp  eax, esi
+        jz   .endloop
+
+        inc  edi
+        cmp  edi, 8
+        jl  .loop
+
+.endloop:
         push 0x10
         call new
         add  esp,4
         test eax, eax
         jz   hackend
-
-        movsx ecx, word [esi+0x5492]     ;HouseClass::BaseSpawnCell.Y
-        imul  ecx, ecx, 1000
-        movsx edi, word [esi+0x5490]     ;HouseClass::BaseSpawnCell.X
-        add   edi, ecx
 
         push edi
         push str_BSP
