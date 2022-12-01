@@ -1,0 +1,177 @@
+#
+#  Windows build action for yr-patches.
+#
+#  Authors: CCHyper, OmniBlade
+#
+
+name: Windows
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  create_release:
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Delete Previous Release
+      uses: dev-drprasad/delete-tag-and-release@v0.2.0
+      with:
+        delete_release: true
+        tag_name: latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    name: Build
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      
+    steps:
+    - name: Clone Repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        
+    - name: Clone CnCNet Repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        repository: CnCNet/yr-patches-private
+        path: 'cncnet'
+        ssh-key: ${{ secrets.CNCNET_CI_SSH_PRIVATEKEY }}
+        
+    - name: Get Branch Name
+      id: branch-name
+      uses: tj-actions/branch-names@v5.2
+        
+    - name: Set Variables
+      id: gitinfo
+      run: |
+        echo "Branch name: '${{ steps.branch-name.outputs.current_branch }}'"
+        
+        echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+        echo "::set-output name=date::$(git show -s --date=format:'%Y-%m-%d' --format=%cd HEAD)"
+        
+    - name: MSVC Dev Cmd
+      uses: ilammy/msvc-dev-cmd@v1.10.0
+      with:
+        arch: x86
+        
+    - name: Download WinBuilds
+      uses: suisei-cn/actions-download-file@v1
+      with:
+        url: "https://downloads.cncnet.org/WinBuilds32ForGitHubCI.zip"
+        
+    - name: Install WinBuilds
+      run: |
+        7z x WinBuilds32ForGitHubCI.zip -owin-builds-patch-32
+        Get-ChildItem
+        Get-ChildItem -Path 'win-builds-patch-32'
+        
+    - name: Add WinBuilds To PATH
+      run: |
+        echo "$env:GITHUB_WORKSPACE\win-builds-patch-32" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        echo "$env:GITHUB_WORKSPACE\win-builds-patch-32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        
+    - name: Build Binaries
+      run: |
+        Get-ChildItem
+        Get-ChildItem -Path 'cncnet'
+        
+        New-Item -Path 'build\release\exe' -ItemType Directory
+        New-Item -Path 'build\release\dll' -ItemType Directory
+        
+        gmake clean
+        gmake -j8 SPAWNER=1 default
+        Get-ChildItem
+        Move-Item -Path 'gamemd-output.exe' -Destination 'build\release\exe\gamemd.exe'
+        
+        gmake clean
+        gmake -j8 SPAWNER=1 STATS=1 CNCNET=1 default
+        Get-ChildItem
+        Move-Item -Path 'gamemd-output.exe' -Destination 'build\release\exe\gamemd-cncnet.exe'
+        
+        gmake clean
+        gmake -j8 SPAWNER=1 STATS=1 dll
+        Get-ChildItem
+        Move-Item -Path 'cncnet-spawn.dll' -Destination 'build\release\dll\cncnet.dll'
+        Move-Item -Path 'ares-spawn.dll' -Destination 'build\release\dll\ares.dll'
+        Move-Item -Path 'mo-ares-spawn.dll' -Destination 'build\release\dll\mo.dll'
+        
+        New-Item -Path 'build\debug\exe' -ItemType Directory
+        New-Item -Path 'build\debug\dll' -ItemType Directory
+        
+        gmake clean
+        gmake -j8 SPAWNER=1 WWDEBUG=1 default
+        Get-ChildItem
+        Move-Item -Path 'gamemd-output.exe' -Destination 'build\debug\exe\gamemd.exe'
+        
+        gmake clean
+        gmake -j8 SPAWNER=1 STATS=1 CNCNET=1 WWDEBUG=1 default
+        Get-ChildItem
+        Move-Item -Path 'gamemd-output.exe' -Destination 'build\debug\exe\gamemd-cncnet.exe'
+        
+        gmake clean
+        gmake -j8 SPAWNER=1 STATS=1 WWDEBUG=1 dll
+        Get-ChildItem
+        Move-Item -Path 'cncnet-spawn.dll' -Destination 'build\debug\dll\cncnet.dll'
+        Move-Item -Path 'ares-spawn.dll' -Destination 'build\debug\dll\ares.dll'
+        Move-Item -Path 'mo-ares-spawn.dll' -Destination 'build\debug\dll\mo.dll'
+        
+        Get-ChildItem -Path 'build\release\exe'
+        Get-ChildItem -Path 'build\release\dll'
+        Get-ChildItem -Path 'build\debug\exe'
+        Get-ChildItem -Path 'build\debug\dll'
+        
+    - name: Copy Binaries
+      run: |      
+        New-Item -Path 'artifact\release\exe' -ItemType Directory
+        New-Item -Path 'artifact\release\dll' -ItemType Directory
+        New-Item -Path 'artifact\debug\exe' -ItemType Directory
+        New-Item -Path 'artifact\debug\dll' -ItemType Directory
+        
+        Move-Item -Path 'build\release\exe\gamemd.exe' -Destination 'artifact\release\exe\gamemd.exe'
+        Move-Item -Path 'build\release\exe\gamemd-cncnet.exe' -Destination 'artifact\release\exe\gamemd-cncnet.exe'
+        Move-Item -Path 'build\debug\exe\gamemd.exe' -Destination 'artifact\debug\exe\gamemd.exe'
+        Move-Item -Path 'build\debug\exe\gamemd-cncnet.exe' -Destination 'artifact\debug\exe\gamemd-cncnet.exe'
+        
+        Move-Item -Path 'build\release\dll\cncnet.dll' -Destination 'artifact\release\dll\cncnet.dll'
+        Move-Item -Path 'build\release\dll\ares.dll' -Destination 'artifact\release\dll\ares.dll'
+        Move-Item -Path 'build\release\dll\mo.dll' -Destination 'artifact\release\dll\mo.dll'
+        Move-Item -Path 'build\debug\dll\cncnet.dll' -Destination 'artifact\debug\dll\cncnet.dll'
+        Move-Item -Path 'build\debug\dll\ares.dll' -Destination 'artifact\debug\dll\ares.dll'
+        Move-Item -Path 'build\debug\dll\mo.dll' -Destination 'artifact\debug\dll\mo.dll'
+        
+        Get-ChildItem -Path 'artifact\release\exe'
+        Get-ChildItem -Path 'artifact\release\dll'
+        Get-ChildItem -Path 'artifact\debug\exe'
+        Get-ChildItem -Path 'artifact\debug\dll'
+        
+        Get-ChildItem
+        Get-ChildItem -Path 'build'
+        Get-ChildItem -Path 'artifact'
+        
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: yr-patches-${{ matrix.type }}-${{ steps.branch-name.outputs.current_branch }}-${{ steps.gitinfo.outputs.sha_short }}-${{ steps.gitinfo.outputs.date }}
+        path: artifact
+        
+    - name: Create Archive For Release
+      run: |
+        Get-ChildItem -Path 'build'
+        7z a yr-patches-${{ steps.branch-name.outputs.current_branch }}-${{ steps.gitinfo.outputs.sha_short }}.zip .\artifact\*
+        
+    - name: Upload New Release
+      if: ${{ github.event_name != 'pull_request' }}
+      uses: softprops/action-gh-release@v1
+      with:
+        name: Latest
+        tag_name: latest
+        body: Latest yr-patches binaries.
+        files: |
+          yr-patches-${{ steps.branch-name.outputs.current_branch }}-${{ steps.gitinfo.outputs.sha_short }}.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

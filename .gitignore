@@ -19,3 +19,6 @@ config.mk
 
 # extern
 src/extern
+
+# CnCNet custom sources
+/cncnet
