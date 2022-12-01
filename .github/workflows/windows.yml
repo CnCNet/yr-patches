@@ -84,41 +84,37 @@ jobs:
         New-Item -Path 'build\release\dll' -ItemType Directory
         
         gmake clean
-        gmake -j8 SPAWNER=1 default
+        gmake -j8 default
         Get-ChildItem
         Move-Item -Path 'gamemd-output.exe' -Destination 'build\release\exe\gamemd.exe'
         
         gmake clean
         gmake -j8 SPAWNER=1 STATS=1 CNCNET=1 default
         Get-ChildItem
-        Move-Item -Path 'gamemd-output.exe' -Destination 'build\release\exe\gamemd-cncnet.exe'
+        Move-Item -Path 'gamemd-output.exe' -Destination 'build\release\exe\gamemd-spawn.exe'
         
         gmake clean
         gmake -j8 SPAWNER=1 STATS=1 dll
         Get-ChildItem
-        Move-Item -Path 'cncnet-spawn.dll' -Destination 'build\release\dll\cncnet.dll'
-        Move-Item -Path 'ares-spawn.dll' -Destination 'build\release\dll\ares.dll'
-        Move-Item -Path 'mo-ares-spawn.dll' -Destination 'build\release\dll\mo.dll'
+        Move-Item -Path 'cncnet-spawn.dll' -Destination 'build\release\dll\cncnet5.dll'
         
         New-Item -Path 'build\debug\exe' -ItemType Directory
         New-Item -Path 'build\debug\dll' -ItemType Directory
         
         gmake clean
-        gmake -j8 SPAWNER=1 WWDEBUG=1 default
+        gmake -j8 WWDEBUG=1 default
         Get-ChildItem
         Move-Item -Path 'gamemd-output.exe' -Destination 'build\debug\exe\gamemd.exe'
         
         gmake clean
         gmake -j8 SPAWNER=1 STATS=1 CNCNET=1 WWDEBUG=1 default
         Get-ChildItem
-        Move-Item -Path 'gamemd-output.exe' -Destination 'build\debug\exe\gamemd-cncnet.exe'
+        Move-Item -Path 'gamemd-output.exe' -Destination 'build\debug\exe\gamemd-spawn.exe'
         
         gmake clean
         gmake -j8 SPAWNER=1 STATS=1 WWDEBUG=1 dll
         Get-ChildItem
-        Move-Item -Path 'cncnet-spawn.dll' -Destination 'build\debug\dll\cncnet.dll'
-        Move-Item -Path 'ares-spawn.dll' -Destination 'build\debug\dll\ares.dll'
-        Move-Item -Path 'mo-ares-spawn.dll' -Destination 'build\debug\dll\mo.dll'
+        Move-Item -Path 'cncnet-spawn.dll' -Destination 'build\debug\dll\cncnet5.dll'
         
         Get-ChildItem -Path 'build\release\exe'
         Get-ChildItem -Path 'build\release\dll'
@@ -133,16 +129,12 @@ jobs:
         New-Item -Path 'artifact\debug\dll' -ItemType Directory
         
         Move-Item -Path 'build\release\exe\gamemd.exe' -Destination 'artifact\release\exe\gamemd.exe'
-        Move-Item -Path 'build\release\exe\gamemd-cncnet.exe' -Destination 'artifact\release\exe\gamemd-cncnet.exe'
+        Move-Item -Path 'build\release\exe\gamemd-spawn.exe' -Destination 'artifact\release\exe\gamemd-spawn.exe'
         Move-Item -Path 'build\debug\exe\gamemd.exe' -Destination 'artifact\debug\exe\gamemd.exe'
-        Move-Item -Path 'build\debug\exe\gamemd-cncnet.exe' -Destination 'artifact\debug\exe\gamemd-cncnet.exe'
+        Move-Item -Path 'build\debug\exe\gamemd-spawn.exe' -Destination 'artifact\debug\exe\gamemd-spawn.exe'
         
-        Move-Item -Path 'build\release\dll\cncnet.dll' -Destination 'artifact\release\dll\cncnet.dll'
-        Move-Item -Path 'build\release\dll\ares.dll' -Destination 'artifact\release\dll\ares.dll'
-        Move-Item -Path 'build\release\dll\mo.dll' -Destination 'artifact\release\dll\mo.dll'
-        Move-Item -Path 'build\debug\dll\cncnet.dll' -Destination 'artifact\debug\dll\cncnet.dll'
-        Move-Item -Path 'build\debug\dll\ares.dll' -Destination 'artifact\debug\dll\ares.dll'
-        Move-Item -Path 'build\debug\dll\mo.dll' -Destination 'artifact\debug\dll\mo.dll'
+        Move-Item -Path 'build\release\dll\cncnet5.dll' -Destination 'artifact\release\dll\cncnet5.dll'
+        Move-Item -Path 'build\debug\dll\cncnet5.dll' -Destination 'artifact\debug\dll\cncnet5.dll'
         
         Get-ChildItem -Path 'artifact\release\exe'
         Get-ChildItem -Path 'artifact\release\dll'

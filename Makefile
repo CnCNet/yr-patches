@@ -109,8 +109,6 @@ DLL_OBJS = src/ares.o \
 		src/spawner/always_spawn.o \
 		src/custom_connection_timeout.o
 
-MO_OBJS = src/mo/rename.o
-
 PETOOL ?= petool
 STRIP ?= strip
 NASM ?= nasm
@@ -122,9 +120,9 @@ WINDRES	?= windres
 default: $(OUTPUT)
 
 .PHONY: all
-all: gamemd-syringe.exe ares-spawn.dll cncnet-spawn.dll $(OUTPUT)
+all: cncnet-spawn.dll $(OUTPUT)
 .PHONY: dll
-dll: gamemd-syringe.exe ares-spawn.dll mo-ares-spawn.dll cncnet-spawn.dll
+dll: cncnet-spawn.dll
 
 %.o: %.asm
 	$(NASM) $(NFLAGS) -o $@ $<
@@ -148,24 +146,10 @@ $(OUTPUT): $(LDS) $(INPUT) $(OBJS)
 src/spawner/always_spawn.o: src/spawner/load_spawn.c
 	$(CC) $(CFLAGS) -DALWAYS_SPAWN -c -o $@ $^
 
-mo-ares-spawn.dll: sym.o res/mo_dll_res.o src/loading_dll.o $(filter-out src/spawner/load_spawn.o, $(SPAWNER_OBJS)) $(DLL_OBJS) $(MO_OBJS)
+cncnet-spawn.dll: sym.o res/dll_res.o src/loading_dll.o $(filter-out src/spawner/load_spawn.o, $(SPAWNER_OBJS)) $(DLL_OBJS)
 	$(CC) $(CFLAGS) $(DLL_LDFLAGS) -DARES -o $@ $^ -lmsvcrt
 	$(STRIP) $@
 	$(PETOOL) dump $@
-
-ares-spawn.dll: sym.o res/dll_res.o src/loading_dll.o $(filter-out src/spawner/load_spawn.o, $(SPAWNER_OBJS)) $(DLL_OBJS)
-	$(CC) $(CFLAGS) $(DLL_LDFLAGS) -DARES -o $@ $^ -lmsvcrt
-	$(STRIP) $@
-	$(PETOOL) dump $@
-
-cncnet-spawn.dll: $(filter-out src/spawner/load_spawn.o,$(OBJS)) $(DLL_OBJS)
-	$(CC) $(CFLAGS) $(DLL_LDFLAGS),--dynamicbase -o $@ $^
-	$(STRIP) $@
-	$(STRIP) -R .syhks00 $@
-	$(PETOOL) dump $@
-
-gamemd-syringe.exe: src/gamemd-syringe.c
-	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	$(RM) $(OUTPUT) ares-spawn.dll src/loading_dll.o cncnet-spawn.dll gamemd-syringe.exe res/mo_dll_res.o res/dll_res.o $(ARES_OBJS) $(DLL_OBJS) $(OBJS) $(SPAWNER_OBJS)
+	$(RM) $(OUTPUT) cncnet-spawn.dll src/loading_dll.o res/dll_res.o $(ARES_OBJS) $(DLL_OBJS) $(OBJS) $(SPAWNER_OBJS)
