@@ -14,11 +14,11 @@ REV				= $(shell git rev-parse --short @{0})
 VERSION			= SOFT_VERSION-CnCNet-patch-$(REV)
 WINDRES_FLAGS	= --preprocessor-arg -DVERSION="$(VERSION)"
 
-OBJS = \
+EXE_OBJS = \
 		src/no-cd.o \
 		src/no_window_frame.o \
+		src/mods/saved_games_in_subdir.o \
 		src/custom.mix.o \
-		src/custom_connection_timeout.o \
 		src/loading.o \
 		src/graphics-patch.o \
 		src/copy-protection.o \
@@ -51,48 +51,6 @@ OBJS = \
 		res/res.o \
 		sym.o
 
-SPAWNER_OBJS = \
-		src/spawner/selectable_countries.o \
-		src/spawner/selectable_handicaps.o \
-		src/spawner/selectable_colors.o \
-		src/spawner/selectable_spawns.o \
-		src/spawner/coop.o \
-		src/spawner/predetermined_alliances.o \
-		src/spawner/spectators.o \
-		src/spawner/skip_score.o \
-		src/spawner/add_player_node.o \
-		src/spawner/load_spawn.o \
-		src/spawner/protocol_zero.o \
-		src/spawner/random_map.o
-
-ifndef CNCNET
-	SPAWNER_OBJS += src/spawner/nethack.o
-endif
-
-ifdef STATS
-	CFLAGS += -DSTATS=1
-	SPAWNER_OBJS += src/statistics.o
-endif
-
-ifdef SPAWNER
-	CFLAGS += -DSPAWNER=1
-	OBJS += $(SPAWNER_OBJS)
-endif
-
-ifdef CNCNET
-	NFLAGS += -DCNCNET=1
-	CFLAGS += -DCNCNET=1
-	include cncnet/makefile.mk
-	OBJS += $(CNCNET_OBJS)
-endif
-
-ifdef WWDEBUG
-	NFLAGS += -D WWDEBUG
-	CFLAGS += -D WWDEBUG
-	OBJS += src/yr_util.o \
-			src/misc_debug.o
-endif
-
 DLL_OBJS = src/ares.o \
 		src/no_window_frame.o \
 		src/mods/saved_games_in_subdir.o \
@@ -106,8 +64,62 @@ DLL_OBJS = src/ares.o \
 		src/online_optimizations.o \
 		src/rage_quit.o \
 		src/single-proc-affinity.o \
+		src/loading_dll.o \
 		src/spawner/always_spawn.o \
-		src/custom_connection_timeout.o
+		res/dll_res.o \
+		sym.o
+
+SPAWNER_OBJS = \
+		src/custom_connection_timeout.o \
+		src/spawner/add_player_node.o \
+		src/spawner/coop.o \
+		src/spawner/load_spawn.o \
+		src/spawner/predetermined_alliances.o \
+		src/spawner/protocol_zero.o \
+		src/spawner/random_map.o \
+		src/spawner/selectable_colors.o \
+		src/spawner/selectable_countries.o \
+		src/spawner/selectable_handicaps.o \
+		src/spawner/selectable_spawns.o \
+		src/spawner/skip_score.o \
+		src/spawner/spectators.o
+
+ifndef CNCNET
+	SPAWNER_OBJS += src/spawner/nethack.o
+endif
+
+ifdef CNCNET
+	NFLAGS += -DCNCNET=1
+	CFLAGS += -DCNCNET=1
+	include cncnet/makefile.mk
+	EXE_OBJS += $(CNCNET_OBJS)
+	DLL_OBJS += $(CNCNET_OBJS)
+endif
+
+STATS_OBJS = \
+	src/statistics.o
+
+ifdef STATS
+	CFLAGS += -DSTATS=1
+	SPAWNER_OBJS += $(STATS_OBJS)
+endif
+
+ifdef SPAWNER
+	CFLAGS += -DSPAWNER=1
+	EXE_OBJS += $(SPAWNER_OBJS)
+	DLL_OBJS += $(SPAWNER_OBJS)
+endif
+
+WWDEBUG_OBJS = \
+	src/yr_util.o \
+	src/misc_debug.o
+
+ifdef WWDEBUG
+	NFLAGS += -D WWDEBUG
+	CFLAGS += -D WWDEBUG
+	EXE_OBJS += $(WWDEBUG_OBJS)
+	DLL_OBJS += $(WWDEBUG_OBJS)
+endif
 
 PETOOL ?= petool
 STRIP ?= strip
@@ -130,14 +142,11 @@ dll: cncnet-spawn.dll
 %.o: %.rc
 	$(WINDRES) $(WINDRES_FLAGS) $< $@
 
-res/mo_dll_res.o: res/dll_res.rc
-	$(WINDRES) $(WINDRES_FLAGS) -DMO=1 $< $@
-
 rsrc.o: $(INPUT)
 	$(PETOOL) re2obj $(INPUT) $@
 
-$(OUTPUT): $(LDS) $(INPUT) $(OBJS)
-	$(LD) $(LDFLAGS) -T $(LDS) -o $@ $(OBJS)
+$(OUTPUT): $(LDS) $(INPUT) $(EXE_OBJS)
+	$(LD) $(LDFLAGS) -T $(LDS) -o $@ $(EXE_OBJS)
 	$(PETOOL) setdd $@ 1 $(IMPORTS) || ($(RM) $@ && exit 1)
 	$(PETOOL) patch $@ || ($(RM) $@ && exit 1)
 	$(STRIP) -R .patch $@ || ($(RM) $@ && exit 1)
@@ -146,10 +155,10 @@ $(OUTPUT): $(LDS) $(INPUT) $(OBJS)
 src/spawner/always_spawn.o: src/spawner/load_spawn.c
 	$(CC) $(CFLAGS) -DALWAYS_SPAWN -c -o $@ $^
 
-cncnet-spawn.dll: sym.o res/dll_res.o src/loading_dll.o $(filter-out src/spawner/load_spawn.o, $(SPAWNER_OBJS)) $(DLL_OBJS)
+cncnet-spawn.dll: $(filter-out src/spawner/load_spawn.o, $(DLL_OBJS))
 	$(CC) $(CFLAGS) $(DLL_LDFLAGS) -DARES -o $@ $^ -lmsvcrt
 	$(STRIP) $@
 	$(PETOOL) dump $@
 
 clean:
-	$(RM) $(OUTPUT) cncnet-spawn.dll src/loading_dll.o res/dll_res.o $(ARES_OBJS) $(DLL_OBJS) $(OBJS) $(SPAWNER_OBJS)
+	$(RM) $(OUTPUT) cncnet-spawn.dll $(DLL_OBJS) $(EXE_OBJS) $(SPAWNER_OBJS) $(CNCNET_OBJS) $(STATS_OBJS) $(WWDEBUG_OBJS)

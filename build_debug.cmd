@@ -1,9 +1,10 @@
 @echo off
 REM
-REM cnc-patch environment config
+REM cnc-patch Debug build
 REM
-set PATH=C:\win-builds-patch-32\bin
+call setenv.cmd
 gmake clean
 pause
-gmake SPAWNER=1 STATS=1 WWDEBUG=1 default
+gmake -j8 SPAWNER=1 STATS=1 CNCNET=1 WWDEBUG=1 default
+move gamemd-output.exe gamemd-spawn.exe
 pause
