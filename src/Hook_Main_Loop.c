@@ -1,26 +1,45 @@
 #include "macros/patch.h"
 #include "RA.h"
 #include "SessionClass.h"
+#include "network.h"
+#include "EventClass.h"
 
 CALL(0x0055DDA5, _MessageListClass__Manage_hack);
+
+extern int SpawnerActive;
 
 int32_t NextAutoSS = 0;
 int32_t AutoSSInterval = 4;
 int32_t AutoSSGrowth = 4;
 int32_t AutoSSIntervalMax = 30;
 
+int32_t ResponseTimeFrame = 0;
+int32_t ResponseTimeInterval = 4;
+
 void __thiscall
 MessageListClass__Manage_hack(void *message_list)
 {
-    if (RunAutoSS && SessionType == 3 && Frame > NextAutoSS)
+    MessageListClass__Manage(message_list);
+
+    if (SpawnerActive && SessionType == 3 /* GAME_IPX */)
     {
-        DoingAutoSS = 1;
-        ScreenCaptureCommandClass_Execute();
-        DoingAutoSS = 0;
-        NextAutoSS = Frame + AutoSSInterval * 60; //60fps
-        if (AutoSSInterval < AutoSSIntervalMax)
-            AutoSSInterval += AutoSSGrowth;
+        /*
+        if (RunAutoSS && Frame > NextAutoSS)
+        {
+            DoingAutoSS = 1;
+            ScreenCaptureCommandClass_Execute();
+            DoingAutoSS = 0;
+            NextAutoSS = Frame + AutoSSInterval * 60; //60fps
+            if (AutoSSInterval < AutoSSIntervalMax)
+                AutoSSInterval += AutoSSGrowth;
+        }
+        */
+
+        if (UseProtocolZero && Frame >= ResponseTimeFrame)
+        {
+            ResponseTimeFrame = Frame + ResponseTimeInterval;
+            Send_Response_Time();
+        }
     }
 
-    MessageListClass__Manage(message_list);
 }

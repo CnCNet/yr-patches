@@ -60,6 +60,7 @@ setcglob 0x007D15A0, _strlen
 setcglob 0x007E1198, _imp__ReleaseMutex
 setcglob 0x007E1234, _imp__SetEvent
 setcglob 0x007E1178, _imp__ResetEvent
+setcglob 0x007E1530, _imp__timeGetTime
 
 ; Memory
 setcglob 0x007C8E17, new
@@ -174,9 +175,9 @@ setcglob 0x00A8ED94, Seed
 setcglob 0x0052FC20, Init_Random
 
 ; Message
-;setcglob 0x007E2C34, MessageListClass_this
+setcglob 0x00A8BC60, MessageListClass_this
 setcglob 0x00A83D4C, PlayerPtr
-;setcglob 0x00572FE0, MessageListClass__Add_Message
+setcglob 0x005D3BA0, MessageListClass__Add_Message
 ;setcglob 0x006B2330, Get_Message_Delay_Or_Duration
 setcglob 0x005D4430, MessageListClass__Manage ;
 
@@ -190,6 +191,7 @@ setcglob 0x007B1CA0, WinsockInterfaceClass__Discard_In_Buffers
 setcglob 0x007B1D10, WinsockInterfaceClass__Discard_Out_Buffers
 setcglob 0x00A8E9C0, IPXManagerClass_this
 setcglob 0x00540C60, IPXManagerClass__Set_Timing
+setcglob 0x00542450, IPXManagerClass__Response_Time
 setcglob 0x0053ECB0, IPXAddressClass__IPXAddressClass
 setcglob 0x00A8B8B4, MPDEBUG
 setcglob 0x00A8B8B5, MPDEBUG1
@@ -200,8 +202,8 @@ setcglob 0x00A8B568, MaxMaxAhead
 setcglob 0x00A8B554, FrameSendRate
 setcglob 0x00A8DB9C, LatencyFudge
 setcglob 0x00A8B558, RequestedFPS
-setcglob 0x00A8B570, PrecalcFrameRate
-setcglob 0x00A8B56C, PrecalcMaxAhead
+setcglob 0x00A8B570, PreCalcFrameRate
+setcglob 0x00A8B56C, PreCalcMaxAhead
 setcglob 0x00A8B24C, ProtocolVersion
 setcglob 0x00A8ED84, Frame
 
@@ -243,6 +245,7 @@ setcglob 0x0089F978, WindowedMode
 setcglob 0x0052D9A6, Init_Main_Menu
 setcglob 0x005D74A0, MPGameMode_AllyTeams
 setcglob 0x006471A0, Queue_Exit
+setcglob 0x00A802C8, OutList
 
 ; Drawing
 setcglob 0x00887314, DSurface_Temp

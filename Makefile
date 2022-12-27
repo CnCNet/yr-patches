@@ -71,10 +71,14 @@ DLL_OBJS = src/ares.o \
 
 SPAWNER_OBJS = \
 		src/custom_connection_timeout.o \
+		src/Hook_Main_Loop.o \
 		src/spawner/add_player_node.o \
 		src/spawner/coop.o \
 		src/spawner/load_spawn.o \
 		src/spawner/predetermined_alliances.o \
+		src/spawner/extended_events_c.o \
+		src/spawner/extended_events.o \
+		src/spawner/protocol_zero_c.o \
 		src/spawner/protocol_zero.o \
 		src/spawner/random_map.o \
 		src/spawner/selectable_colors.o \
