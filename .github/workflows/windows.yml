@@ -81,14 +81,8 @@ jobs:
         Get-ChildItem
         Get-ChildItem -Path 'cncnet'
 
-        New-Item -Path 'build\release\standard' -ItemType Directory
         New-Item -Path 'build\release\cncnet' -ItemType Directory
         New-Item -Path 'build\release\cncnet-hardened' -ItemType Directory
-
-        gmake clean
-        gmake -j8 default
-        Get-ChildItem
-        Move-Item -Path 'gamemd-output.exe' -Destination 'build\release\standard\gamemd.exe'
 
         gmake clean
         gmake -j8 SPAWNER=1 STATS=1 default
@@ -110,14 +104,8 @@ jobs:
         Get-ChildItem
         Move-Item -Path 'cncnet-spawn.dll' -Destination 'build\release\cncnet-hardened\cncnet5.dll'
 
-        New-Item -Path 'build\debug\standard' -ItemType Directory
         New-Item -Path 'build\debug\cncnet' -ItemType Directory
         New-Item -Path 'build\debug\cncnet-hardened' -ItemType Directory
-
-        gmake clean
-        gmake -j8 WWDEBUG=1 default
-        Get-ChildItem
-        Move-Item -Path 'gamemd-output.exe' -Destination 'build\debug\standard\gamemd.exe'
 
         gmake clean
         gmake -j8 SPAWNER=1 STATS=1 WWDEBUG=1 default
@@ -141,20 +129,16 @@ jobs:
 
     - name: Copy Binaries
       run: |
-        New-Item -Path 'artifact\release\standard' -ItemType Directory
         New-Item -Path 'artifact\release\cncnet' -ItemType Directory
         New-Item -Path 'artifact\release\cncnet-hardened' -ItemType Directory
 
-        Move-Item -Path 'build\release\standard\gamemd.exe' -Destination 'artifact\release\standard\gamemd.exe'
         Move-Item -Path 'build\release\cncnet\gamemd-spawn.exe' -Destination 'artifact\release\cncnet\gamemd-spawn.exe'
         Move-Item -Path 'build\release\cncnet\cncnet5.dll' -Destination 'artifact\release\cncnet\cncnet5.dll'
         Move-Item -Path 'build\release\cncnet-hardened\gamemd-spawn.exe' -Destination 'artifact\release\cncnet-hardened\gamemd-spawn.exe'
 
-        New-Item -Path 'artifact\debug\standard' -ItemType Directory
         New-Item -Path 'artifact\debug\cncnet' -ItemType Directory
         New-Item -Path 'artifact\debug\cncnet-hardened' -ItemType Directory
 
-        Move-Item -Path 'build\debug\standard\gamemd.exe' -Destination 'artifact\debug\standard\gamemd.exe'
         Move-Item -Path 'build\debug\cncnet\gamemd-spawn.exe' -Destination 'artifact\debug\cncnet\gamemd-spawn.exe'
         Move-Item -Path 'build\debug\cncnet\cncnet5.dll' -Destination 'artifact\debug\cncnet\cncnet5.dll'
         Move-Item -Path 'build\debug\cncnet-hardened\gamemd-spawn.exe' -Destination 'artifact\debug\cncnet-hardened\gamemd-spawn.exe'
