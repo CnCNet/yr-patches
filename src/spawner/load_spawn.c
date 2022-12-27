@@ -314,12 +314,28 @@ signed int Initialize_Spawn()
         WinsockInterfaceClass__Discard_Out_Buffers(WinsockInterface_this);
         IPXManagerClass__Set_Timing(&IPXManagerClass_this, 60, -1, 600, 1);
 
-        FrameSendRate = INIClass__GetInt(&INIClass_SPAWN, "Settings", "FrameSendRate", 4);
-        MaxAhead = INIClass__GetInt(&INIClass_SPAWN, "Settings", "MaxAhead", FrameSendRate * 6);
+        UseProtocolZero = INIClass__GetInt(&INIClass_SPAWN, "Settings", "Protocol", 0) == 0;
+        if(UseProtocolZero)
+        {
+            // FrameSendRate should not be configurable in proto 0
+            FrameSendRate = 2;
+
+            // This initial MaxAhead, it will get overridden by the PreCalcMaxAhead after the first second of the game
+            MaxAhead = INIClass__GetInt(&INIClass_SPAWN, "Settings", "MaxAhead", 12);
+            PreCalcMaxAhead = INIClass__GetInt(&INIClass_SPAWN, "Settings", "PreCalcMaxAhead", 0);
+        }
+        else
+        {
+            FrameSendRate = INIClass__GetInt(&INIClass_SPAWN, "Settings", "FrameSendRate", 4);
+            MaxAhead = INIClass__GetInt(&INIClass_SPAWN, "Settings", "MaxAhead", FrameSendRate * 6);
+        }
+
+        // We just hack protocol 2 to act like protocol zero
+        ProtocolVersion = 2;
+        RequestedFPS = 60;
         MaxMaxAhead = 0;
         LatencyFudge = 0;
-        RequestedFPS = 60;
-        ProtocolVersion = INIClass__GetInt(&INIClass_SPAWN, "Settings", "Protocol", 2);
+
         //Init_Network(1, v14, v15, v16, v17);    // might be void
         Init_Network();
 

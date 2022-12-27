@@ -21,8 +21,13 @@ typedef struct HouseTypeClass_vtable {
     int (__thiscall *Read_INI)(HouseType *houseType, INIClass *ini);
 } HouseTypeClass_vtable;
 
+typedef struct HouseClass {
+    char gap[0x30];
+    int ArrayIndex;
+} HouseClass;
 
+extern HouseClass *PlayerPtr;
 HouseType **HouseTypeClassArray;
 int32_t HouseTypeClassArray_Count;
 
-#endif //HOUSECLASS_H
+#endif

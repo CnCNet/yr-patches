@@ -18,7 +18,6 @@ extern uint32_t Frame;
 extern uint32_t WOLGameID;
 extern uint32_t SessionType;
 extern bool OutOfSync;
-extern void *PlayerPtr;
 extern bool QuickMatch;
 extern bool RunAutoSS;
 extern bool DoingAutoSS;
