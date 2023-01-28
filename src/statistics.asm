@@ -516,4 +516,9 @@ _Regester_Game_End_Time_Hack:
 ;// AI has stats
 ;//
 ;///////////////////////////////////////////////////////////////////////////////
-@LJMP 0x006C73F8, 0x006C7402
+hack 0x006C73F8, 0x006C7402
+    mov ebx, [eax+0x34]         ; pHouse->Class
+    mov bl, [ebx+0x1A6]         ; pHouse->Class->MultiplayPassive
+    test bl, bl
+    jnz 0x6C7414
+    jmp hackend
