@@ -15,7 +15,7 @@ void __thiscall WinsockInterfaceClass__Discard_In_Buffers(WinsockInterfaceClass 
 void __thiscall WinsockInterfaceClass__Discard_Out_Buffers(WinsockInterfaceClass *this);
 void __thiscall WinsockInterfaceClass__Start_Listening(WinsockInterfaceClass *this);
 
-void __thiscall IPXManagerClass__Set_Timing(IPXManagerClass *this, int32_t a1, int32_t a2, int32_t a3, int32_t a4);
+void __thiscall IPXManagerClass__Set_Timing(IPXManagerClass *this, int32_t NewRetryDelta, int32_t NewMaxRetries, int32_t NewRetryTimeout, bool SetGlobalConnClass);
 int32_t __thiscall IPXManagerClass__Response_Time(IPXManagerClass *this);
 
 extern int32_t MaxAhead;
