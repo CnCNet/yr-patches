@@ -119,7 +119,7 @@ Handle_Timing_Change(EventClass *event)
     WorstMaxAhead = max;
 
     WWDebug_Printf("Player %d, Loss mode (%d, %d)\n", PlayerPtr->ArrayIndex, setHighLossMode, HighLossMode);
-    if (setHighLossMode != HighLossMode && (SessionType == 3 || SessionType == 4))
+    if (setHighLossMode > HighLossMode && (SessionType == 3 || SessionType == 4))
     {
         HighLossMode = setHighLossMode;
 
