@@ -34,7 +34,7 @@ EventClass__Add(EventClass *this)
     {
         memcpy(&OutList.List[OutList.Tail], this, sizeof(EventClass));
         OutList.Timings[OutList.Tail] = timeGetTime();
-        OutList.Tail = (OutList.Tail + 1) & 127;
+        OutList.Tail = (LOBYTE(OutList.Tail) + 1) & 127;
         OutList.Count++;
     }
 }
