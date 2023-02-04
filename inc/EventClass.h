@@ -27,11 +27,11 @@ typedef struct EventClass {
 } EventClass;
 
 typedef struct EventList128 {
-    	int Count;
-	int Head;
-	int Tail;
-	EventClass List[128];
-	int Timings[128];
+    int Count;
+    int Head;
+    int Tail;
+    EventClass List[128];
+    int Timings[128];
 } EventList128;
 #pragma pack(pop)
 

@@ -4,7 +4,7 @@
 #include "network.h"
 #include "EventClass.h"
 
-CALL(0x0055DDA5, _MessageListClass__Manage_hack);
+CALL(0x0055DDA5, _MainLoop_AfterRender);
 
 extern int SpawnerActive;
 
@@ -17,7 +17,7 @@ int32_t ResponseTimeFrame = 0;
 int32_t ResponseTimeInterval = 4;
 
 void __thiscall
-MessageListClass__Manage_hack(void *message_list)
+MainLoop_AfterRender(void *message_list)
 {
     MessageListClass__Manage(message_list);
 

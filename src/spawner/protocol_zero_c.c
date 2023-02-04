@@ -16,17 +16,16 @@ Hack_Response_Time(IPXManagerClass *this)
 }
 
 void __thiscall
-Hack_Set_Timing(IPXManagerClass *this, int NewRetryDelta, int a3, int NewRetryTimeout, bool SetGlobalConnClass)
+Hack_Set_Timing(IPXManagerClass *this, int NewRetryDelta, int NewMaxRetries, int NewRetryTimeout, bool SetGlobalConnClass)
 {
 
-    IPXManagerClass__Set_Timing(this, NewRetryDelta, a3, NewRetryTimeout, SetGlobalConnClass);
+    IPXManagerClass__Set_Timing(this, NewRetryDelta, NewMaxRetries, NewRetryTimeout, SetGlobalConnClass);
     WWDebug_Printf("NewRetryDelta = %d,  NewRetryTimeout = %d, FrameSendRate = %d, HighLossMode = %d\n",
                    NewRetryDelta, NewRetryTimeout, FrameSendRate, HighLossMode);
 }
 
 int SendResponseTimeFrame = 240;
 int SendResponseTimeInterval = 30;
-
 
 void __thiscall
 EventClass__Add(EventClass *this)
@@ -40,8 +39,7 @@ EventClass__Add(EventClass *this)
     }
 }
 
-void
-Send_Response_Time()
+void Send_Response_Time()
 {
     if (UseProtocolZero)
     {
@@ -52,7 +50,6 @@ Send_Response_Time()
             setHighLossMode = LOSS_MODE_BEST;
         else if (rspTime <= 15)
             setHighLossMode = LOSS_MODE_MEDIUM;
-
 
         if (rspTime > -1 && (Frame > SendResponseTimeFrame))
         {
@@ -66,11 +63,10 @@ Send_Response_Time()
             event.Data.ResponseTime2.HighLossMode = setHighLossMode;
             EventClass__Add(&event);
             WWDebug_Printf("Player %d sending response time of %d, HighLossMode = %d\n",
-                PlayerPtr->ArrayIndex, event.Data.ResponseTime2.MaxAhead, event.Data.ResponseTime2.HighLossMode);
+                           PlayerPtr->ArrayIndex, event.Data.ResponseTime2.MaxAhead, event.Data.ResponseTime2.HighLossMode);
         }
     }
 }
-
 
 int NextDecreaseFrame = 90;
 int DecreaseInterval = 450;
@@ -84,11 +80,11 @@ int TimingTimeout = 120;
 extern uint8_t NewFrameSendRate;
 extern bool MPDEBUG;
 typedef void MessageListClass;
-extern MessageListClass* MessageListClass_this;
+extern MessageListClass *MessageListClass_this;
 
 void __thiscall
 MessageListClass__Add_Message(MessageListClass *this, const wchar_t *Name, int ID,
-        const wchar_t* message, int color, int32_t PrintType, int32_t duration, bool SinglePlayer);
+                                              const wchar_t *message, int color, int32_t PrintType, int32_t duration, bool SinglePlayer);
 
 void __thiscall
 Handle_Timing_Change(EventClass *event)
@@ -127,7 +123,7 @@ Handle_Timing_Change(EventClass *event)
     {
         HighLossMode = setHighLossMode;
 
-        switch(HighLossMode)
+        switch (HighLossMode)
         {
         case LOSS_MODE_BEST:
             NewFrameSendRate = 2;
@@ -147,7 +143,7 @@ Handle_Timing_Change(EventClass *event)
         if (MPDEBUG)
         {
             wchar_t *message;
-            switch(HighLossMode)
+            switch (HighLossMode)
             {
             case LOSS_MODE_BEST:
                 message = L"Latency mode set to BEST!";
