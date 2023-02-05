@@ -17,15 +17,15 @@
 #include <windows.h>
 #include <stdio.h>
 
-#include "RA.h"
-
-// this tricks syringe to load this dll
-__asm (
-    ".section .syhks00,\"d8\";" // AlexB said the alignment has to be 16 bytes
-    ".long 0;"
-    ".long 0;"
-    ".string \"stub\";"
-);
+#define DEFINE_HOOK(OFFSET, NAME, SIZE)           \
+char NAME ## _ ## OFFSET [0x20] = #NAME;          \
+__asm (                                           \
+    ".section .syhks00,\"d8\";"                   \
+    ".long " #OFFSET ";"                          \
+    ".long " #SIZE ";"                            \
+    ".long (_" #NAME "_" #OFFSET ");"             \
+);                                                \
+DWORD __cdecl __declspec(dllexport) NAME (void* R)
 
 #ifdef WWDEBUG
 #define dprintf printf
@@ -40,11 +40,20 @@ static DWORD get_dword(char **p)
     return ret;
 }
 
+HINSTANCE hinstDLL = NULL;
+
 BOOL WINAPI __declspec(dllexport)
-DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
+DllMain(HINSTANCE hinst, DWORD fdwReason, LPVOID lpvReserved)
 {
     if (fdwReason == DLL_PROCESS_ATTACH)
-    {
+        hinstDLL = hinst;
+
+    return TRUE;
+}
+
+DEFINE_HOOK(0x7CD810, ExeRun_ApplyPatchs, 0x9)
+{
+    if(hinstDLL) {
         char buf[MAX_PATH + 1] = { 0 };
         GetModuleFileName(NULL, buf, sizeof buf);
 
@@ -92,5 +101,5 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         }
     }
 
-    return TRUE;
+    return 0;
 }
