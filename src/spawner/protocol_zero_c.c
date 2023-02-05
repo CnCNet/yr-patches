@@ -122,40 +122,28 @@ Handle_Timing_Change(EventClass *event)
     if (setHighLossMode > HighLossMode && (SessionType == 3 || SessionType == 4))
     {
         HighLossMode = setHighLossMode;
+        wchar_t *message;
 
         switch (HighLossMode)
         {
         case LOSS_MODE_BEST:
+            message = L"Latency mode set to BEST!";
             NewFrameSendRate = 2;
             max = 6;
             break;
         case LOSS_MODE_MEDIUM:
+            message = L"Latency mode set to MEDIUM!";
             NewFrameSendRate = 3;
             max = 12;
             break;
         default:
+            message = L"Latency mode set to WORST!";
             NewFrameSendRate = 4;
             max = 16;
         }
         PreCalcMaxAhead = max;
         PreCalcFrameRate = 60;
 
-        if (MPDEBUG)
-        {
-            wchar_t *message;
-            switch (HighLossMode)
-            {
-            case LOSS_MODE_BEST:
-                message = L"Latency mode set to BEST!";
-                break;
-            case LOSS_MODE_MEDIUM:
-                message = L"Latency mode set to MEDIUM!";
-                break;
-            default:
-                message = L"Latency mode set to WORST!";
-            }
-
-            MessageListClass__Add_Message(&MessageListClass_this, 0, 0, message, 4, 0x4096, 270, 1);
-        }
+        MessageListClass__Add_Message(&MessageListClass_this, 0, 0, message, 4, 0x4096, 270, 1);
     }
 }
