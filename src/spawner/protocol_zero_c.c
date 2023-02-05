@@ -129,21 +129,20 @@ Handle_Timing_Change(EventClass *event)
         case LOSS_MODE_BEST:
             message = L"CnCNet: Latency mode set to BEST!";
             NewFrameSendRate = 2;
-            max = 6;
+            PreCalcMaxAhead = 6;
             break;
         case LOSS_MODE_MEDIUM:
             message = L"CnCNet: Latency mode set to MEDIUM!";
             NewFrameSendRate = 3;
-            max = 12;
+            PreCalcMaxAhead = 12;
             break;
         default:
             message = L"CnCNet: Latency mode set to WORST!";
             NewFrameSendRate = 4;
-            max = 16;
+            PreCalcMaxAhead = 16;
         }
-        PreCalcMaxAhead = max;
-        PreCalcFrameRate = 60;
 
+        PreCalcFrameRate = 60;
         MessageListClass__Add_Message(&MessageListClass_this, 0, 0, message, 4, 0x4096, 270, 1);
     }
 }
