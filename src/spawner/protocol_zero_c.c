@@ -127,17 +127,17 @@ Handle_Timing_Change(EventClass *event)
         switch (HighLossMode)
         {
         case LOSS_MODE_BEST:
-            message = L"Latency mode set to BEST!";
+            message = L"CnCNet: Latency mode set to BEST!";
             NewFrameSendRate = 2;
             max = 6;
             break;
         case LOSS_MODE_MEDIUM:
-            message = L"Latency mode set to MEDIUM!";
+            message = L"CnCNet: Latency mode set to MEDIUM!";
             NewFrameSendRate = 3;
             max = 12;
             break;
         default:
-            message = L"Latency mode set to WORST!";
+            message = L"CnCNet: Latency mode set to WORST!";
             NewFrameSendRate = 4;
             max = 16;
         }
