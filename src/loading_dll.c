@@ -50,7 +50,7 @@ read_extra_options(INIClass *old_INI, const char *section, const char *key, bool
 
         bool *handleClose = (bool *)GetProcAddress(hDDraw, "GameHandlesClose");
         if (handleClose)
-            *handleClose = true;
+            *handleClose = !INIClass__GetBool(&RA2md_INI, "Options", "DDrawHandlesClose", false);
 
         SkipScoreScreen         = INIClass__GetBool(&RA2md_INI, "Options", "SkipScoreScreen", false);
         DisableEdgeScrolling    = INIClass__GetBool(&RA2md_INI, "Options", "DisableEdgeScrolling", false);
