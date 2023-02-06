@@ -3,14 +3,10 @@
 #include <commctrl.h>
 #include <richedit.h>
 
-#ifdef MO
-#define SUBTITLE     Mental Omega Spawner
-#else
-#define SUBTITLE     Spawner
-#endif
-#define HARD_VERSION 1,0,2,4
-#define SOFT_VERSION 1.24
-#define YEAR         2020
+#define SUBTITLE     CnCNet5 Spawner
+#define HARD_VERSION 1,3,0,0
+#define SOFT_VERSION 1.3
+#define YEAR         2023
 #define ABBREVIATION Spawner
 
 #include "dll_version.rch"
