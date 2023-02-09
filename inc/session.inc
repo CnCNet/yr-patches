@@ -29,3 +29,4 @@ cextern GameMode
 cextern GameIDNumber
 cextern WOLGameID
 cextern UsePNG
+cextern ObserverMode

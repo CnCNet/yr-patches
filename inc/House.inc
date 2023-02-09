@@ -1,6 +1,8 @@
 %include "macros/extern.inc"
 
 ; House
+cextern PlayerPtr
+cextern PlayerPtr2_Observer
 cextern HouseClassArray
 cextern HouseClassArray_Count
 cextern HouseTypesArray

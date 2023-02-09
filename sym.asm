@@ -69,6 +69,8 @@ setcglob 0x007D3374, calloc
 setcglob 0x007C93E8, ac_free  ; Memory that's been allocated by the game exe or calloc or ac_malloc must bee freed with ac_free
 
 ; House
+setcglob 0x00A83D4C, PlayerPtr
+setcglob 0x00AC1198, PlayerPtr2_Observer
 setcglob 0x00A8022C, HouseClassArray
 setcglob 0x00A80238, HouseClassArray_Count
 setcglob 0x00A83C9C, HouseTypeClassArray
@@ -176,7 +178,6 @@ setcglob 0x0052FC20, Init_Random
 
 ; Message
 setcglob 0x00A8BC60, MessageListClass_this
-setcglob 0x00A83D4C, PlayerPtr
 setcglob 0x005D3BA0, MessageListClass__Add_Message
 ;setcglob 0x006B2330, Get_Message_Delay_Or_Duration
 setcglob 0x005D4430, MessageListClass__Manage ;
