@@ -25,6 +25,20 @@
 	jmp 0x004FCBDE
 @ENDHACK
 
+@HACK 0x006439F4, _ProgressScreenClass_643720_Skirmsh_Spectator_Patch
+	mov ecx, dword [SessionType]
+	test ecx, ecx
+	jz  0x00643A18    ; jump if (SessionType == Campaign)
+	jmp 0x00643A04
+@ENDHACK
+
+@HACK 0x00642B60, _ProgressScreenClass_LoadTextColor3_Skirmsh_Spectator_Patch
+	mov eax, dword [SessionType]
+	test eax, eax
+	jz  0x00642B8B    ; jump if (SessionType == Campaign)
+	jmp 0x00642B6F
+@ENDHACK
+
 @HACK 0x004FC9E0, _HouseClass__Flag_To_Win_Skirmsh_Spectator_Patch
 	cmp dword [SessionType], 5
 	jnz .Normal_Code
