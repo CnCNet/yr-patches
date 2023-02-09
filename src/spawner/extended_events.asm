@@ -1,14 +1,24 @@
 %include "macros/patch.inc"
+%include "macros/hack.inc"
 %include "macros/extern.inc"
 
 cextern Extended_Events
 
-_EventClass__Execute_Extended:
-    push esi
-    call Extended_Events
+@HACK 0x004C6CC8, _Networking_RespondToEvent
+	PUSHAD
 
-    jmp 0x004C8109
+	mov  al, [esi]
+	cmp  eax, 46
+	ja  .Extended
 
-hack 0x004C6CD1, 0x004C6CD7
-    ja  _EventClass__Execute_Extended
-    jmp hackend
+.Normal_Code:
+	POPAD
+	mov  al, [esi]
+	mov  edi, [ecx+ebx*4]
+	jmp  0x004C6CCD
+
+.Extended:
+	push esi
+	call Extended_Events
+	jmp  .Normal_Code
+@ENDHACK
