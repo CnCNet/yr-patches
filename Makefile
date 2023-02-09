@@ -54,6 +54,7 @@ EXE_OBJS = \
 DLL_OBJS = src/ares.o \
 		src/no_window_frame.o \
 		src/mods/saved_games_in_subdir.o \
+		src/loading_dll.o \
 		src/fix_mouse_not_found_error.o \
 		src/video_mode_hack.o \
 		src/type_select_hacks.o \
@@ -61,10 +62,9 @@ DLL_OBJS = src/ares.o \
 		src/high_res_fix.o \
 		src/disable_edge_scrolling.o \
 		src/fix_common_crashes.o \
+		src/single-proc-affinity.o \
 		src/online_optimizations.o \
 		src/rage_quit.o \
-		src/single-proc-affinity.o \
-		src/loading_dll.o \
 		src/spawner/always_spawn.o \
 		res/dll_res.o \
 		sym.o
