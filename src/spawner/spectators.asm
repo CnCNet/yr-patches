@@ -7,7 +7,7 @@
 ; Prevent losing/winning in skirmish spectator mode
 ; And allow skirmish spectators to control gamespeed
 ; Show observer loading screen for skirmish spectators
-
+; TODO: Allow multiple spectators to watch an AI fight in multiplayer
 @HACK 0x004FCBD0, _HouseClass__Flag_To_Lose_Skirmsh_Spectator_Patch
 	cmp dword [SessionType], 5
 	jnz .Normal_Code
