@@ -55,6 +55,7 @@ DLL_OBJS = src/ares.o \
 		src/no_window_frame.o \
 		src/mods/saved_games_in_subdir.o \
 		src/loading_dll.o \
+		src/multi_spectators_hack.o \
 		src/fix_mouse_not_found_error.o \
 		src/video_mode_hack.o \
 		src/type_select_hacks.o \
