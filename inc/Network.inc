@@ -24,3 +24,6 @@ cextern ProtocolVersion
 cextern Init_Network
 cextern NameNodes_CurrentSize
 cextern HumanPlayers
+
+cextern UseProtocolZero
+cextern NewFrameSendRate

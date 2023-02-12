@@ -5,38 +5,92 @@
 #include "network.h"
 #include "SessionClass.h"
 
-uint8_t HighLossMode = 0;
-int32_t WorstMaxAhead = 24;
+enum LatencyLevels
+{
+    LATENCY_LEVEL_INITIAL = 0,
+
+    LATENCY_LEVEL_1 = 1,
+    LATENCY_LEVEL_2 = 2,
+    LATENCY_LEVEL_3 = 3,
+    LATENCY_LEVEL_4 = 4,
+    LATENCY_LEVEL_5 = 5,
+    LATENCY_LEVEL_6 = 6,
+    LATENCY_LEVEL_7 = 7,
+    LATENCY_LEVEL_8 = 8,
+    LATENCY_LEVEL_9 = 9,
+
+    LATENCY_LEVEL_MAX = LATENCY_LEVEL_9,
+    LATENCY_SIZE = 1 + LATENCY_LEVEL_MAX
+};
+
+const int32_t LatencyLevels_MaxAhead[LATENCY_SIZE] = {
+    /* 0 */ 1,
+
+    /* 1 */ 4,
+    /* 2 */ 6,
+    /* 3 */ 12,
+    /* 4 */ 16,
+    /* 5 */ 20,
+    /* 6 */ 24,
+    /* 7 */ 28,
+    /* 8 */ 32,
+    /* 9 */ 36};
+
+const wchar_t *LatencyLevels_Message[LATENCY_SIZE] = {
+    /* 0 */ L"CnCNet: Latency mode set to: 0 - Initial", // Players should never see this, if it doesn't then it's a bug
+
+    /* 1 */ L"CnCNet: Latency mode set to: 1 - Best",
+    /* 2 */ L"CnCNet: Latency mode set to: 2 - Super",
+    /* 3 */ L"CnCNet: Latency mode set to: 3 - Excellent",
+    /* 4 */ L"CnCNet: Latency mode set to: 4 - Very Good",
+    /* 5 */ L"CnCNet: Latency mode set to: 5 - Good",
+    /* 6 */ L"CnCNet: Latency mode set to: 6 - Good",
+    /* 7 */ L"CnCNet: Latency mode set to: 7 - Default",
+    /* 8 */ L"CnCNet: Latency mode set to: 8 - Default",
+    /* 9 */ L"CnCNet: Latency mode set to: 9 - Default",
+};
+
 bool UseProtocolZero = false;
+uint8_t MaxLatencyLevel = LATENCY_LEVEL_MAX;
+uint8_t LatencyMode = LATENCY_LEVEL_INITIAL;
+extern uint8_t NewFrameSendRate = 3;
+extern int32_t WorstMaxAhead = 24;
 
-int32_t __thiscall
-Hack_Response_Time(IPXManagerClass *this)
-{
-    return WorstMaxAhead;
-}
-
-void __thiscall
-Hack_Set_Timing(IPXManagerClass *this, int NewRetryDelta, int NewMaxRetries, int NewRetryTimeout, bool SetGlobalConnClass)
-{
-
-    IPXManagerClass__Set_Timing(this, NewRetryDelta, NewMaxRetries, NewRetryTimeout, SetGlobalConnClass);
-    WWDebug_Printf("NewRetryDelta = %d,  NewRetryTimeout = %d, FrameSendRate = %d, HighLossMode = %d\n",
-                   NewRetryDelta, NewRetryTimeout, FrameSendRate, HighLossMode);
-}
-
-int SendResponseTimeFrame = 240;
 int SendResponseTimeInterval = 30;
+int TimingTimeout = 4 * 30;
+int SendResponseTimeFrame = 8 * 30;
 
-void __thiscall
-EventClass__Add(EventClass *this)
+uint8_t LatencyMode_from_ResponseTime(uint8_t rspTime)
 {
-    if (OutList.Count < 128)
+    for (uint8_t i = 1; i < LATENCY_LEVEL_MAX; i++)
     {
-        memcpy(&OutList.List[OutList.Tail], this, sizeof(EventClass));
-        OutList.Timings[OutList.Tail] = timeGetTime();
-        OutList.Tail = (LOBYTE(OutList.Tail) + 1) & 127;
-        OutList.Count++;
+        if (rspTime <= LatencyLevels_MaxAhead[i])
+            return i;
     }
+
+    return LATENCY_LEVEL_MAX;
+}
+
+void LatencyMode_Apply(uint8_t setLatencyMode)
+{
+    if (setLatencyMode > LATENCY_LEVEL_MAX)
+        setLatencyMode = LATENCY_LEVEL_MAX;
+
+    if (setLatencyMode > MaxLatencyLevel)
+        setLatencyMode = MaxLatencyLevel;
+
+    if (setLatencyMode <= LatencyMode)
+        return;
+
+    WWDebug_Printf("Player %d, Loss mode (%d, %d)\n", PlayerPtr->ArrayIndex, setLatencyMode, LatencyMode);
+
+    PreCalcFrameRate = 60;
+    LatencyMode = setLatencyMode;
+    NewFrameSendRate = setLatencyMode;
+    PreCalcMaxAhead = LatencyLevels_MaxAhead[setLatencyMode];
+
+    wchar_t* message = LatencyLevels_Message[setLatencyMode];
+    MessageListClass__Add_Message(&MessageListClass_this, 0, 0, message, 4, 0x4096, 270, 1);
 }
 
 void Send_Response_Time()
@@ -44,51 +98,32 @@ void Send_Response_Time()
     if (UseProtocolZero)
     {
         int32_t rspTime = IPXManagerClass__Response_Time(&IPXManagerClass_this);
-        uint8_t setHighLossMode = LOSS_MODE_WORST;
-
-        if (rspTime <= 9)
-            setHighLossMode = LOSS_MODE_BEST;
-        else if (rspTime <= 15)
-            setHighLossMode = LOSS_MODE_MEDIUM;
-
         if (rspTime > -1 && (Frame > SendResponseTimeFrame))
         {
             SendResponseTimeFrame = Frame + SendResponseTimeInterval;
 
             EventClass event;
             event.Type = EVENTTYPE_RESPONSE_TIME2;
-            event.Data.ResponseTime2.PlayerID = PlayerPtr->ArrayIndex;
             event.Frame = Frame + MaxAhead;
+            event.Data.ResponseTime2.PlayerID = PlayerPtr->ArrayIndex;
             event.Data.ResponseTime2.MaxAhead = (int8_t)rspTime + 1;
-            event.Data.ResponseTime2.HighLossMode = setHighLossMode;
+            event.Data.ResponseTime2.LatencyLevel = LatencyMode_from_ResponseTime(rspTime);
             EventClass__Add(&event);
-            WWDebug_Printf("Player %d sending response time of %d, HighLossMode = %d\n",
-                           PlayerPtr->ArrayIndex, event.Data.ResponseTime2.MaxAhead, event.Data.ResponseTime2.HighLossMode);
+            WWDebug_Printf("Player %d sending response time of %d, LatencyMode = %d\n",
+                           PlayerPtr->ArrayIndex, event.Data.ResponseTime2.MaxAhead, event.Data.ResponseTime2.LatencyLevel);
         }
     }
 }
 
-int NextDecreaseFrame = 90;
-int DecreaseInterval = 450;
-int TrackHighLossMode = 0;
+int32_t PlayerMaxAheads[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+uint8_t PlayerLatencyMode[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+int32_t PlayerLastTimingFrame[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
-int32_t PlayerMaxAheads[8] = {0};
-uint8_t PlayerHighLossMode[8] = {0};
-int32_t PlayerLastTimingFrame[8] = {0};
-int TimingTimeout = 120;
-
-extern uint8_t NewFrameSendRate;
-extern bool MPDEBUG;
-typedef void MessageListClass;
-extern MessageListClass *MessageListClass_this;
-
-void __thiscall
-MessageListClass__Add_Message(MessageListClass *this, const wchar_t *Name, int ID,
-                                              const wchar_t *message, int color, int32_t PrintType, int32_t duration, bool SinglePlayer);
-
-void __thiscall
-Handle_Timing_Change(EventClass *event)
+void __thiscall Handle_Timing_Change(EventClass *event)
 {
+    if (UseProtocolZero == false || (SessionType != 3 && SessionType != 4))
+        return;
+
     if (event->Data.ResponseTime2.MaxAhead == 0)
     {
         WWDebug_Printf("Returning because event->MaxAhead == 0\n");
@@ -98,51 +133,37 @@ Handle_Timing_Change(EventClass *event)
     int32_t id = event->Data.ResponseTime2.PlayerID;
     PlayerLastTimingFrame[id] = event->Frame;
     PlayerMaxAheads[id] = (int32_t)event->Data.ResponseTime2.MaxAhead;
-    PlayerHighLossMode[id] = event->Data.ResponseTime2.HighLossMode;
+    PlayerLatencyMode[id] = event->Data.ResponseTime2.LatencyLevel;
 
-    uint8_t setHighLossMode = 0;
+    uint8_t setLatencyMode = 0;
     int max = 0;
     for (int i = 0; i < 8; ++i)
     {
         if (PlayerLastTimingFrame[i] + TimingTimeout < Frame)
         {
             PlayerMaxAheads[i] = 0;
-            PlayerHighLossMode[i] = 0;
+            PlayerLatencyMode[i] = 0;
         }
         else
         {
             max = PlayerMaxAheads[i] > max ? PlayerMaxAheads[i] : max;
-            if (PlayerHighLossMode[i] > setHighLossMode)
-                setHighLossMode = PlayerHighLossMode[i];
+            if (PlayerLatencyMode[i] > setLatencyMode)
+                setLatencyMode = PlayerLatencyMode[i];
         }
     }
     WorstMaxAhead = max;
+    LatencyMode_Apply(setLatencyMode);
+}
 
-    WWDebug_Printf("Player %d, Loss mode (%d, %d)\n", PlayerPtr->ArrayIndex, setHighLossMode, HighLossMode);
-    if (setHighLossMode > HighLossMode && (SessionType == 3 || SessionType == 4))
-    {
-        HighLossMode = setHighLossMode;
-        wchar_t *message;
+int32_t __thiscall Hack_Response_Time(IPXManagerClass *this)
+{
+    return WorstMaxAhead;
+}
 
-        switch (HighLossMode)
-        {
-        case LOSS_MODE_BEST:
-            message = L"CnCNet: Latency mode set to BEST!";
-            NewFrameSendRate = 2;
-            PreCalcMaxAhead = 6;
-            break;
-        case LOSS_MODE_MEDIUM:
-            message = L"CnCNet: Latency mode set to MEDIUM!";
-            NewFrameSendRate = 3;
-            PreCalcMaxAhead = 12;
-            break;
-        default:
-            message = L"CnCNet: Latency mode set to WORST!";
-            NewFrameSendRate = 4;
-            PreCalcMaxAhead = 16;
-        }
+void __thiscall Hack_Set_Timing(IPXManagerClass *this, int NewRetryDelta, int NewMaxRetries, int NewRetryTimeout, bool SetGlobalConnClass)
+{
 
-        PreCalcFrameRate = 60;
-        MessageListClass__Add_Message(&MessageListClass_this, 0, 0, message, 4, 0x4096, 270, 1);
-    }
+    IPXManagerClass__Set_Timing(this, NewRetryDelta, NewMaxRetries, NewRetryTimeout, SetGlobalConnClass);
+    WWDebug_Printf("NewRetryDelta = %d,  NewRetryTimeout = %d, FrameSendRate = %d, LatencyMode = %d\n",
+                   NewRetryDelta, NewRetryTimeout, FrameSendRate, LatencyMode);
 }

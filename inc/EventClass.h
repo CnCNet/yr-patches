@@ -2,10 +2,6 @@
 #include <stdint.h>
 #include "EventTypes.h"
 
-#define LOSS_MODE_BEST 1
-#define LOSS_MODE_MEDIUM 2
-#define LOSS_MODE_WORST 3
-
 #pragma pack(push, 1)
 typedef struct EventClass {
     char Type;
@@ -20,8 +16,8 @@ typedef struct EventClass {
         struct ResponseTime2 {
             int32_t PlayerID;
             int8_t MaxAhead;
-            int8_t FrameSendRate;
-            int8_t HighLossMode;
+            uint8_t LatencyLevel;
+            // int8_t FrameSendRate;
         } ResponseTime2;
     } Data;
 } EventClass;

@@ -23,9 +23,6 @@ hack 0x004C800C,                       ;EventClass::Execute->TIMING
 
     jmp 0x4C8024
 
-gbyte NewFrameSendRate, 2
-cextern UseProtocolZero
-
 ; Don't set framesend rate to 10 in Generate_Process_Time_Event
 hack 0x00647EB4, 0x00647EBE            ;Queue_AI_Multiplayer
     cmp byte[UseProtocolZero], 0
