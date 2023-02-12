@@ -147,3 +147,14 @@ Extended_Events(EventClass *event)
             WWDebug_Printf("Extended event not found %d\n", event->Type);
     }
 }
+
+void __thiscall EventClass__Add(EventClass *this)
+{
+    if (OutList.Count < 128)
+    {
+        memcpy(&OutList.List[OutList.Tail], this, sizeof(EventClass));
+        OutList.Timings[OutList.Tail] = timeGetTime();
+        OutList.Tail = (LOBYTE(OutList.Tail) + 1) & 127;
+        OutList.Count++;
+    }
+}

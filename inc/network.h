@@ -25,6 +25,7 @@ extern int32_t LatencyFudge;
 extern int32_t RequestedFPS;
 extern int32_t ProtocolVersion;
 extern bool    UseProtocolZero;
+extern uint8_t MaxLatencyLevel;
 extern int32_t PreCalcMaxAhead;
 extern int32_t PreCalcFrameRate;
 extern int32_t HumanPlayers;

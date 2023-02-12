@@ -11,7 +11,7 @@
 void WWDebug_Printf(char *fmt, ...);
 #endif
 
-unsigned long Crc32_ComputeBuf( unsigned long inCrc32, const void *buf, size_t bufLen );
+unsigned long Crc32_ComputeBuf(unsigned long inCrc32, const void *buf, size_t bufLen);
 void __thiscall Keyboard_Process(void *this);
 void DoCrcFile();
 extern uint32_t Frame;
@@ -22,7 +22,6 @@ extern bool QuickMatch;
 extern bool RunAutoSS;
 extern bool DoingAutoSS;
 extern bool UsePNG;
-
 
 void *new(int32_t size);
 void __thiscall ScenarioClass_ReadLightingAndBasic(void *this, void *ini);
@@ -40,4 +39,9 @@ void __thiscall Draw_Confined_PCX(void *pcx, void *a2, void *surface, void *a4, 
 void __fastcall Write_PCX_File(CCFileClass *ccfile, DSurface *surface, void *palette);
 
 void __thiscall ScreenCaptureCommandClass_Execute();
-void __thiscall MessageListClass__Manage(void *message_list);
+
+typedef void MessageListClass;
+extern MessageListClass *MessageListClass_this;
+void __thiscall MessageListClass__Manage(MessageListClass *message_list);
+void __thiscall MessageListClass__Add_Message(MessageListClass *this, const wchar_t *Name, int ID,
+                                              const wchar_t *message, int color, int32_t PrintType, int32_t duration, bool SinglePlayer);

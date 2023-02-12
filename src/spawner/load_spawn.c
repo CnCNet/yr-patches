@@ -323,6 +323,8 @@ signed int Initialize_Spawn()
             // This initial MaxAhead, it will get overridden by the PreCalcMaxAhead after the first second of the game
             MaxAhead = INIClass__GetInt(&INIClass_SPAWN, "Settings", "MaxAhead", 12);
             PreCalcMaxAhead = INIClass__GetInt(&INIClass_SPAWN, "Settings", "PreCalcMaxAhead", 0);
+
+            MaxLatencyLevel = INIClass__GetInt(&INIClass_SPAWN, "Settings", "MaxLatencyLevel", 0xFF);
         }
         else
         {
