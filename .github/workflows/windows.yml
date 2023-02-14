@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
     - name: Delete Previous Release
+      if: ${{ github.event_name != 'pull_request' }}
       uses: dev-drprasad/delete-tag-and-release@v0.2.0
       with:
         delete_release: true
