@@ -70,7 +70,7 @@ setcglob 0x007C93E8, ac_free  ; Memory that's been allocated by the game exe or 
 
 ; House
 setcglob 0x00A83D4C, PlayerPtr
-setcglob 0x00AC1198, PlayerPtr2_Observer
+setcglob 0x00AC1198, ObserverPtr
 setcglob 0x00A8022C, HouseClassArray
 setcglob 0x00A80238, HouseClassArray_Count
 setcglob 0x00A83C9C, HouseTypeClassArray

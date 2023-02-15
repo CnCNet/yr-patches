@@ -12,9 +12,9 @@ HouseClass__Flag_To_Lose_RETN_Patch:
 
 Assign_Houses_Multi_Spectators_Hack:
 	mov edx, [PlayerPtr]
-	cmp [PlayerPtr2_Observer], edx
+	cmp [ObserverPtr], edx
 	jz .Ret
-	mov [PlayerPtr2_Observer], ebp
+	mov [ObserverPtr], ebp
 
 .Ret:
 	jmp 0x00688122

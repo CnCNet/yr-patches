@@ -11,7 +11,7 @@
 ; Also making them visible to detached allies
 @HACK 0x00703A09, _TechnoClass_VisualCharacter_CloakVisibility
 	mov edx, [PlayerPtr]
-	cmp [PlayerPtr2_Observer], edx
+	cmp [ObserverPtr], edx
 	jz  0x00703A5A           ; UseShadowyVisual
 	jmp 0x00703A16           ; CheckMutualAlliance ( Really detached allies )
 @ENDHACK
@@ -19,7 +19,7 @@
 
 @HACK 0x0045455B, _BuildingClass_VisualCharacter_CloakVisibility
 	mov edx, [PlayerPtr]
-	cmp [PlayerPtr2_Observer], edx
+	cmp [ObserverPtr], edx
 	jz  0x0045452D           ; UseShadowyVisual
 	jmp 0x00454564           ; CheckMutualAlliance ( Really detached allies )
 @ENDHACK
@@ -28,7 +28,7 @@
 ; Allow observers and detached allies coordthing cloaked Technos
 @HACK 0x00692540, _ScrollClass_Coordthing_TechnoClass_Cloak
 	mov edx, [PlayerPtr]
-	cmp [PlayerPtr2_Observer], edx
+	cmp [ObserverPtr], edx
 	jz  .AllowCoordthing
 
 	mov  eax, [edx+0x30]     ; PlayerPtr->ID
@@ -49,7 +49,7 @@
 ; Allow observers and detached allies coordthing cloaked Buildings
 @HACK 0x006925AA, _ScrollClass_Coordthing_BuildingClass_Cloak
 	mov edx, [PlayerPtr]
-	cmp [PlayerPtr2_Observer], edx
+	cmp [ObserverPtr], edx
 	jz  .AllowCoordthing
 
 	mov  eax, [edx+0x30]     ; PlayerPtr->ID
@@ -70,7 +70,7 @@
 @HACK 0x006DA412, _Tactical_Select_At
 	push eax
 	mov eax, [PlayerPtr]
-	cmp [PlayerPtr2_Observer], eax
+	cmp [ObserverPtr], eax
 	jz  .CanSelect
 
 	mov  ecx, [eax+0x30]     ; PlayerPtr->ID
@@ -102,7 +102,7 @@
 	cmp  ecx, eax
 	jz   .Dont_Unselect
 
-	cmp  [PlayerPtr2_Observer], eax
+	cmp  [ObserverPtr], eax
 	jz   .Dont_Unselect
 
 	mov  eax, [eax+0x30]     ; PlayerPtr->ID
@@ -122,7 +122,7 @@
 ; Allow observers and detached allies selected cloaked Buildings
 @HACK 0x004ABE3C, _DisplayClass_Mouse_Left_Release_Cloak
 	mov  eax, [PlayerPtr]
-	cmp  [PlayerPtr2_Observer], eax
+	cmp  [ObserverPtr], eax
 	jz   .Select
 
 	mov  eax, [eax+0x30]     ; PlayerPtr->ID
@@ -145,7 +145,7 @@
 ; Show cloaked Technos on radar for observers and detached allies
 @HACK 0x0070D386, _TechnoClass_Radar_Cloak
 	mov  eax, [PlayerPtr]
-	cmp  [PlayerPtr2_Observer], eax
+	cmp  [ObserverPtr], eax
 	jz   .Show
 
 	mov  eax, [eax+0x30]     ; PlayerPtr->ID
@@ -168,7 +168,7 @@
 ; Show cloaked Buildings on radar for observers and detached allies
 @HACK 0x00457188, _BuildingClass_Radar_Cloak
 	mov  eax, [PlayerPtr]
-	cmp  [PlayerPtr2_Observer], eax
+	cmp  [ObserverPtr], eax
 	jz   .Show
 
 	mov  eax, [eax+0x30]     ; PlayerPtr->ID
@@ -193,7 +193,7 @@
 	mov edx, ecx
 
 	mov  eax, [PlayerPtr]
-	cmp  [PlayerPtr2_Observer], eax
+	cmp  [ObserverPtr], eax
 	jz   .Check_IsInvisible
 
 	mov  eax, [eax+0x30]     ; PlayerPtr->ID
@@ -219,7 +219,7 @@
 ; Show Spy for observer
 @HACK 0x004DEDC3, _FootClass_Get_Image_Data_Desguise
 	mov  ecx, [PlayerPtr]
-	cmp  [PlayerPtr2_Observer], ecx
+	cmp  [ObserverPtr], ecx
 	jz   .Check_DisguiseBeenSeen
 
 .Normal_Code:
@@ -232,7 +232,7 @@
 ; Show name of Spy for observer
 @HACK 0x0051F2F3, _InfantryClass_FullName
 	mov  ecx, [PlayerPtr]
-	cmp  [PlayerPtr2_Observer], ecx
+	cmp  [ObserverPtr], ecx
 	jz  .Return_FullName
 
 .Normal_Code:
@@ -245,7 +245,7 @@
 ; Allow observers selected mirage
 @HACK 0x007467CA, _UnitClass_Cant_Target_Desguise
 	mov  ecx, [PlayerPtr]
-	cmp  [PlayerPtr2_Observer], ecx
+	cmp  [ObserverPtr], ecx
 	jz  0x007467FE
 
 .Normal_Code:
@@ -257,7 +257,7 @@
 ; Flash disguise for Observer
 @HACK 0x0070EE6A, _TechnoClass_Disguise_Been_Seen
 	mov  ecx, [PlayerPtr]
-	cmp  [PlayerPtr2_Observer], ecx
+	cmp  [ObserverPtr], ecx
 	jz  0x0070EE79
 
 .Normal_Code:

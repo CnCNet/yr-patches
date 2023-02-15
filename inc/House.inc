@@ -2,7 +2,7 @@
 
 ; House
 cextern PlayerPtr
-cextern PlayerPtr2_Observer
+cextern ObserverPtr
 cextern HouseClassArray
 cextern HouseClassArray_Count
 cextern HouseTypesArray
