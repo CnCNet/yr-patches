@@ -6,7 +6,7 @@ Random enhancements and bug fixes for Command and Conquer: Red Alert 2 - Yuri's 
 Instructions
 --------------------------------------------------------------------------------
 
- - Download the following file and extract it somewhere: http://hifi.iki.fi/win-builds-for-cnc-patch.zip
+ - Download the following file and extract it somewhere: https://downloads.cncnet.org/win-builds-for-patching.zip
  - Start win-install.bat
 
 
