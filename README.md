@@ -64,9 +64,14 @@ From the shell (MinGW shell on Windows).
 Credits
 --------------------------------------------------------------------------------
 
- - Hifi
- - Iran
+ - Belonit
+ - Burg
  - CCHyper
- - tomsons26
  - dkeeton
+ - hifi
+ - Iran
+ - Rampastring
  - Sonarpulse
+ - secsome
+ - Starkku
+ - tomsons26

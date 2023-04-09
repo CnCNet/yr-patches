@@ -1,7 +1,7 @@
 REM
 REM cnc-patch environment config
 REM
-set PATH=%PATH%;C:\win-builds-patch-32\bin;C:\win-builds-patch-32\i686-w64-mingw32\bin
+set PATH=C:\win-builds-patch-32\bin;C:\win-builds-patch-32\i686-w64-mingw32\bin;%PATH%
 git --version
 ld --version
 as --version
