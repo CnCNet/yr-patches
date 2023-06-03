@@ -24,6 +24,8 @@ extern bool SingleProcAffinity;
 extern bool SkipScoreScreen;
 extern bool DisableEdgeScrolling;
 
+void SetSingleProcAffinity();
+
 CALL(0x006BC0DC, _read_extra_options);
 
 // we mimmic INIClass::GetBool to end with original function call

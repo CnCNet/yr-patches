@@ -187,7 +187,7 @@ bool Ra2Mode = false;
 bool     RunAutoSS;
 
 
-int __fastcall Init_Game(int argc, char **argv);
+int __fastcall InitGame(int argc, char **argv);
 
 int __fastcall Pre_Init_Game(int argc, char **argv)
 {
