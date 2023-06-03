@@ -190,7 +190,7 @@
 
 ; Show tooltips for observers and detached allies
 @HACK 0x004AE62B, _DisplayClass_HelpText_Cloak
-	mov edx, ecx
+	push ecx
 
 	mov  eax, [PlayerPtr]
 	cmp  [ObserverPtr], eax
@@ -204,11 +204,12 @@
 	jnz  .Check_IsInvisible
 
 .Normal_Code:
-	mov ecx, edx
-	mov  eax, [PlayerPtr]
+	pop ecx
+	mov eax, [PlayerPtr]
 	jmp 0x004AE630
 
 .Check_IsInvisible:
+	pop ecx
 	jmp 0x004AE654
 @ENDHACK
 
