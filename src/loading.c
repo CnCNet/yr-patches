@@ -40,6 +40,8 @@ extern bool DisableEdgeScrolling;
 bool UsingTSDDRAW = false;
 bool UsePNG = true;
 
+void SetSingleProcAffinity();
+
 //SETDWORD(0x0052D357+1, _AIMD_INI);
 
 // we mimmic INIClass::GetBool to end with original function call

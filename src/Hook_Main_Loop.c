@@ -7,6 +7,7 @@
 CALL(0x0055DDA5, _MainLoop_AfterRender);
 
 extern int SpawnerActive;
+void Send_Response_Time();
 
 int32_t NextAutoSS = 0;
 int32_t AutoSSInterval = 4;
