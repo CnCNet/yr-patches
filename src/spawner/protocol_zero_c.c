@@ -53,8 +53,8 @@ const wchar_t *LatencyLevels_Message[LATENCY_SIZE] = {
 bool UseProtocolZero = false;
 uint8_t MaxLatencyLevel = LATENCY_LEVEL_MAX;
 uint8_t LatencyMode = LATENCY_LEVEL_INITIAL;
-extern uint8_t NewFrameSendRate = 3;
-extern int32_t WorstMaxAhead = 24;
+uint8_t NewFrameSendRate = 3;
+int32_t WorstMaxAhead = 24;
 
 int SendResponseTimeInterval = 30;
 int TimingTimeout = 4 * 30;
@@ -89,7 +89,7 @@ void LatencyMode_Apply(uint8_t setLatencyMode)
     NewFrameSendRate = setLatencyMode;
     PreCalcMaxAhead = LatencyLevels_MaxAhead[setLatencyMode];
 
-    wchar_t* message = LatencyLevels_Message[setLatencyMode];
+    const wchar_t* message = LatencyLevels_Message[setLatencyMode];
     MessageListClass__Add_Message(&MessageListClass_this, 0, 0, message, 4, 0x4096, 270, 1);
 }
 
