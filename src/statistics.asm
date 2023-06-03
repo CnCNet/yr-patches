@@ -24,6 +24,7 @@ section .rdata
 str_MyIdField db "MYID",0
 str_AccountNameField db "ACCN",0
 str_stats_dmp: db "stats.dmp",0
+str_LATE db "LATE",0
 str_HASH db "HASH",0
 str_NKEY db "NKEY",0
 str_SKEY db "SKEY",0
@@ -35,6 +36,7 @@ alyID equ str_ALY+3
 str_BSP db "BSPx",0
 bspID equ str_BSP+3
 
+cextern LatencyMode
 cextern MapHash
 cextern UIMapName
 
@@ -299,25 +301,48 @@ UseUIMapNameInsteadFilename:
 @SET 0x006C735E, { push UIMapName }
 
 hack 0x006C7378
-IncludeMapHash:
+IncludeMapHashAndLatencyMode:
 	call 0x00625AE0
 
+.hash:
 	push 0x10
 	call 0x007C8E17             ;OperatorNew
 	add  esp, 4
 	cmp  eax, ebp
-	je  .fail
+	je  .hash_fail
 
 	push MapHash
 	push str_HASH
 	mov  ecx, eax
 	call 0x004CB7C0             ;FieldClass__FieldClass_String
-	jmp .noFail
+	jmp .hash_noFail
 
-.fail:
+.hash_fail:
 	xor  eax, eax
 
- .noFail:
+.hash_noFail:
+	push eax
+	lea  ecx, [esp+0x14]
+	call 0x00625AE0             ;PacketClass__Add_Field
+
+.late:
+	push 0x10
+	call 0x007C8E17             ;OperatorNew
+	add  esp, 4
+	cmp  eax, ebp
+	je  .late_fail
+
+	mov  ecx, [LatencyMode]
+	push ecx
+	push str_LATE
+	mov  ecx, eax
+	call 0x004CB5E0             ;FieldClass::FieldClass(char *, UCHAR)
+	jmp .late_noFail
+
+.late_fail:
+	xor  eax, eax
+
+.late_noFail:
 	push eax
 	lea  ecx, [esp+0x14]
 	call 0x00625AE0             ;PacketClass__Add_Field
