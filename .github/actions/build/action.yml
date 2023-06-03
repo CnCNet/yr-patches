@@ -1,0 +1,83 @@
+#
+#  Windows build action for yr-patches.
+#
+#  Authors: CCHyper, OmniBlade, Belonit
+#
+
+name: 'Build yr-patches'
+description: 'Build yr-patches'
+runs:
+  using: "composite"
+  steps:
+  - name: Download WinBuilds
+    uses: suisei-cn/actions-download-file@v1
+    with:
+      url: "https://downloads.cncnet.org/WinBuilds32ForGitHubCI.zip"
+
+  - name: Install WinBuilds
+    shell: powershell
+    run: |
+      7z x WinBuilds32ForGitHubCI.zip -owin-builds-patch-32
+      Get-ChildItem
+      Get-ChildItem -Path 'win-builds-patch-32'
+      echo "Add WinBuilds To PATH"
+      echo "$env:GITHUB_WORKSPACE\win-builds-patch-32" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      echo "$env:GITHUB_WORKSPACE\win-builds-patch-32\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+  - name: Build Binaries
+    shell: powershell
+    run: |
+      Get-ChildItem
+      Get-ChildItem -Path 'cncnet'
+
+      New-Item -Path 'artifact\release\cncnet' -ItemType Directory
+      New-Item -Path 'artifact\release\cncnet-hardened' -ItemType Directory
+
+      gmake clean
+      gmake -j8 SPAWNER=1 STATS=1 default
+      Get-ChildItem
+      Move-Item -Path 'gamemd-output.exe' -Destination 'artifact\release\cncnet\gamemd-spawn.exe'
+
+      gmake clean
+      gmake -j8 SPAWNER=1 STATS=1 dll
+      Get-ChildItem
+      Move-Item -Path 'cncnet-spawn.dll' -Destination 'artifact\release\cncnet\cncnet5.dll'
+
+      gmake clean
+      gmake -j8 SPAWNER=1 STATS=1 CNCNET=1 default
+      Get-ChildItem
+      Move-Item -Path 'gamemd-output.exe' -Destination 'artifact\release\cncnet-hardened\gamemd-spawn.exe'
+
+      gmake clean
+      gmake -j8 SPAWNER=1 STATS=1 CNCNET=1 dll
+      Get-ChildItem
+      Move-Item -Path 'cncnet-spawn.dll' -Destination 'artifact\release\cncnet-hardened\cncnet5.dll'
+
+      New-Item -Path 'artifact\debug\cncnet' -ItemType Directory
+      New-Item -Path 'artifact\debug\cncnet-hardened' -ItemType Directory
+
+      gmake clean
+      gmake -j8 SPAWNER=1 STATS=1 WWDEBUG=1 default
+      Get-ChildItem
+      Move-Item -Path 'gamemd-output.exe' -Destination 'artifact\debug\cncnet\gamemd-spawn.exe'
+
+      gmake clean
+      gmake -j8 SPAWNER=1 STATS=1 WWDEBUG=1 dll
+      Get-ChildItem
+      Move-Item -Path 'cncnet-spawn.dll' -Destination 'artifact\debug\cncnet\cncnet5.dll'
+
+      gmake clean
+      gmake -j8 SPAWNER=1 STATS=1 CNCNET=1 WWDEBUG=1 default
+      Get-ChildItem
+      Move-Item -Path 'gamemd-output.exe' -Destination 'artifact\debug\cncnet-hardened\gamemd-spawn.exe'
+
+      gmake clean
+      gmake -j8 SPAWNER=1 STATS=1 CNCNET=1 WWDEBUG=1 dll
+      Get-ChildItem
+      Move-Item -Path 'cncnet-spawn.dll' -Destination 'artifact\debug\cncnet-hardened\cncnet5.dll'
+
+  - name: Upload Artifact
+    uses: actions/upload-artifact@v2
+    with:
+      name: yr-patches-${{github.sha}}.zip
+      path: artifact/**
