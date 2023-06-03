@@ -53,17 +53,17 @@ _Send_Statistics_Packet_Write_Statistics_Dump:
 	cmp dword [SpawnerActive], 0
 	jz .Normal_Code
 
-	cmp dword [SessionType], 4	;INTERNET
+	cmp dword [SessionType], 4  ;INTERNET
 	jz .Normal_Code
 
-        push DWORD [0x00B0BD90]         ;Length of stats packet
-        push esi
+	push DWORD [0x00B0BD90]     ;Length of stats packet
+	push esi
 	call Write_Stats_File
 
 	mov dword [StatisticsPacketSent], 1
 	jmp 0x006C87B8
 
-.Normal_Code:        ;//////////////////////////////////////////////////////////
+.Normal_Code:
 	mov eax, 0x00AC1170
 	jmp 0x006C8571
 
@@ -82,8 +82,8 @@ Write_Stats_File:
 %define stats_file    EBP-256
 	sub esp,256
 
-        ;lea ecx, [stats_file]
-        ;call RawFileClass__Delete
+	;lea ecx, [stats_file]
+	;call RawFileClass__Delete
 
 	lea ecx, [stats_file]
 	push str_stats_dmp
@@ -106,7 +106,7 @@ Write_Stats_File:
 	lea ecx, [stats_file]
 	call CCFileClass__Close
 
-.exit:               ;//////////////////////////////////////////////////////////
+.exit:
 	mov eax, 1
 
 	mov esp,ebp
@@ -119,14 +119,14 @@ Write_Stats_File:
 ;///////////////////////////////////////////////////////////////////////////////
 @LJMP 0x006C7927, AddMyIdField
 AddMyIdField:
-        pop eax
+	pop eax
 
 	mov eax, dword[PlayerPtr]
 	cmp eax, esi
 	jnz .out
 
 	push 0x10
-	call new ; OperatorNew
+	call new                    ;OperatorNew
 	add esp, 4
 	test eax, eax
 	jz .fail
@@ -137,7 +137,7 @@ AddMyIdField:
 	push ecx
 	push str_MyIdField
 	mov ecx, eax
-	call 0x004CB700 ; FieldClass::FieldClass
+	call 0x004CB700             ;FieldClass::FieldClass
 	jmp .noFail
 
 .fail:
@@ -146,59 +146,59 @@ AddMyIdField:
 .noFail:
 	push eax
 	lea ecx, [esp+0x14]
-	call 0x00625AE0 ;PacketClass__Add_Field
+	call 0x00625AE0             ;PacketClass__Add_Field
 
 .nkey:
-        mov edi, [NetKey]
-        push 0x10
-        call new
+	mov edi, [NetKey]
+	push 0x10
+	call new
 
-        add  esp, 4
-        test eax, eax
-        jz  .fail_nkey
+	add  esp, 4
+	test eax, eax
+	jz  .fail_nkey
 
-        push edi
-        push str_NKEY
-        mov  ecx, eax
-        call 0x004CB760             ;FieldClass::FieldClass(char *, DWORD)
+	push edi
+	push str_NKEY
+	mov  ecx, eax
+	call 0x004CB760             ;FieldClass::FieldClass(char *, DWORD)
 
-        jmp  .noFail_nkey
+	jmp  .noFail_nkey
 
 .fail_nkey:
-        xor eax, eax
+	xor eax, eax
 
 .noFail_nkey:
-        push eax
-        lea  ecx, [esp+0x14]
-        call 0x00625AE0
+	push eax
+	lea  ecx, [esp+0x14]
+	call 0x00625AE0
 
 .skey:
-        mov edi, [StartNetKey]
-        push 0x10
-        call new
+	mov edi, [StartNetKey]
+	push 0x10
+	call new
 
-        add  esp, 4
-        test eax, eax
-        jz  .fail_skey
+	add  esp, 4
+	test eax, eax
+	jz  .fail_skey
 
-        push edi
-        push str_SKEY
-        mov  ecx, eax
-        call 0x004CB760             ;FieldClass::FieldClass(char *, DWORD)
+	push edi
+	push str_SKEY
+	mov  ecx, eax
+	call 0x004CB760             ;FieldClass::FieldClass(char *, DWORD)
 
-        jmp  .noFail_skey
+	jmp  .noFail_skey
 
 .fail_skey:
-        xor eax, eax
+	xor eax, eax
 
 .noFail_skey:
-        push eax
-        lea  ecx, [esp+0x14]
-        call 0x00625AE0
+	push eax
+	lea  ecx, [esp+0x14]
+	call 0x00625AE0
 
 .out:
 	push 0x10
-        call new
+	call new
 	jmp 0x0006C792C
 
 ;///////////////////////////////////////////////////////////////////////////////
@@ -207,58 +207,58 @@ AddMyIdField:
 ;//
 ;///////////////////////////////////////////////////////////////////////////////
 hack 0x006C7984
-        call 0x00625AE0             ;PacketClass::Add_Field
+	call 0x00625AE0             ;PacketClass::Add_Field
 
-        mov  cl, byte[0x00841F43]
-        mov  byte[alyID], cl
-        mov  byte[bspID], cl
+	mov  cl, byte[0x00841F43]
+	mov  byte[alyID], cl
+	mov  byte[bspID], cl
 
-        push 0x10
-        call new
-        add  esp,4
-        test eax, eax
-        jz   hackend
+	push 0x10
+	call new
+	add  esp,4
+	test eax, eax
+	jz   hackend
 
-        mov  edi, [esi+0x5788]      ;HouseClass::AllyBitfield
-        push edi
-        push str_ALY
-        mov  ecx, eax
-        call 0x004CB760             ;FieldClass::FieldClass(char *, DWORD)
+	mov  edi, [esi+0x5788]      ;HouseClass::AllyBitfield
+	push edi
+	push str_ALY
+	mov  ecx, eax
+	call 0x004CB760             ;FieldClass::FieldClass(char *, DWORD)
 
-        push eax
-        lea  ecx, [esp+0x14]        ;pPacket
-        call 0x00625AE0             ;PacketClass::Add_Field
+	push eax
+	lea  ecx, [esp+0x14]        ;pPacket
+	call 0x00625AE0             ;PacketClass::Add_Field
 
 
         mov  edi, 0
 .loop:
-        mov  ecx, edi
-        add  ecx, 4475              ;HouseClass::PlayerAtA
-        call 0x00510ED0             ;PlayerAtToHouseClass
-        cmp  eax, esi
-        jz   .endloop
+	mov  ecx, edi
+	add  ecx, 4475              ;HouseClass::PlayerAtA
+	call 0x00510ED0             ;PlayerAtToHouseClass
+	cmp  eax, esi
+	jz   .endloop
 
-        inc  edi
-        cmp  edi, 8
-        jl  .loop
+	inc  edi
+	cmp  edi, 8
+	jl  .loop
 
 .endloop:
-        push 0x10
-        call new
-        add  esp,4
-        test eax, eax
-        jz   hackend
+	push 0x10
+	call new
+	add  esp,4
+	test eax, eax
+	jz   hackend
 
-        push edi
-        push str_BSP
-        mov  ecx, eax
-        call 0x004CB760             ;FieldClass::FieldClass(char *, DWORD)
+	push edi
+	push str_BSP
+	mov  ecx, eax
+	call 0x004CB760             ;FieldClass::FieldClass(char *, DWORD)
 
-        push eax
-        lea  ecx, [esp+0x14]        ;pPacket
-        call 0x00625AE0             ;PacketClass::Add_Field
+	push eax
+	lea  ecx, [esp+0x14]        ;pPacket
+	call 0x00625AE0             ;PacketClass::Add_Field
 
-        jmp  hackend
+	jmp  hackend
 
 
 ;///////////////////////////////////////////////////////////////////////////////
@@ -270,16 +270,16 @@ AddACCNField:
 	call 0x00625AE0
 
 	push 0x10
-	call 0x007C8E17 ; OperatorNew
+	call 0x007C8E17             ;OperatorNew
 	add esp, 4
 	cmp eax, edi
 	je .fail
 	mov ecx, dword[PlayerPtr]
-	lea ecx, [ecx+0x10DE4] ; 0x10DE4 = HouseClass.PlayerName
+	lea ecx, [ecx+0x10DE4]      ;0x10DE4 = HouseClass.PlayerName
 	push ecx
 	push str_AccountNameField
 	mov ecx, eax
-	call 0x004CB7C0 ; FieldClass__FieldClass_String
+	call 0x004CB7C0             ;FieldClass__FieldClass_String
 	jmp .noFail
 
 .fail:
@@ -288,10 +288,8 @@ AddACCNField:
 .noFail:
 	push eax
 	lea ecx, [esp+0x18]
-	call 0x00625AE0 ;PacketClass__Add_Field
+	call 0x00625AE0             ;PacketClass__Add_Field
 	jmp 0x006C7350
-
-
 
 ;///////////////////////////////////////////////////////////////////////////////
 ;// ()
@@ -302,27 +300,27 @@ UseUIMapNameInsteadFilename:
 
 hack 0x006C7378
 IncludeMapHash:
-        call 0x00625AE0
+	call 0x00625AE0
 
-        push 0x10
-        call 0x007C8E17 ; OperatorNew
+	push 0x10
+	call 0x007C8E17             ;OperatorNew
 	add  esp, 4
-        cmp  eax, ebp
-        je  .fail
+	cmp  eax, ebp
+	je  .fail
 
-        push MapHash
-        push str_HASH
-        mov  ecx, eax
-        call 0x004CB7C0 ; FieldClass__FieldClass_String
-        jmp .noFail
+	push MapHash
+	push str_HASH
+	mov  ecx, eax
+	call 0x004CB7C0             ;FieldClass__FieldClass_String
+	jmp .noFail
 
- .fail:
-        xor  eax, eax
+.fail:
+	xor  eax, eax
 
  .noFail:
-        push eax
-        lea  ecx, [esp+0x14]
-        call 0x00625AE0 ;PacketClass__Add_Field
+	push eax
+	lea  ecx, [esp+0x14]
+	call 0x00625AE0             ;PacketClass__Add_Field
 
 	jmp  hackend
 
@@ -337,7 +335,7 @@ _Execute_DoList_Send_Statistics_Game_Leave2:
 	cmp dword [SpawnerActive], 0
 	jz .Normal_Code
 
-	cmp dword [SessionType], 0	;CAMPAIGN
+	cmp dword [SessionType], 0  ;CAMPAIGN
 	jz .Normal_Code
 
 	jmp .Send
@@ -350,7 +348,7 @@ _Execute_DoList_Send_Statistics_Game_Leave2:
 
 .Normal_Code:
 	mov edx, [SessionType]
-	cmp edx, 4	;INTERNET
+	cmp edx, 4                  ;INTERNET
 	jnz .Dont_Send
 
 	jmp .Send
@@ -367,7 +365,7 @@ _Execute_DoList_Send_Statistics_Game_Leave:
 	cmp dword [SpawnerActive], 0
 	jz .Normal_Code
 
-	cmp dword [SessionType], 0	;CAMPAIGN
+	cmp dword [SessionType], 0  ;CAMPAIGN
 	jz .Normal_Code
 
 	jmp 0x0064C802
@@ -377,7 +375,7 @@ _Execute_DoList_Send_Statistics_Game_Leave:
 
 .Normal_Code:
 	mov edx, [SessionType]
-	cmp edx, 4	;INTERNET
+	cmp edx, 4                  ;INTERNET
 	jnz .Dont_Send
 	jmp 0x0064C802
 
@@ -391,7 +389,7 @@ _Main_Loop_Send_Statistics_Spawner2:
 	cmp dword [SpawnerActive], 0
 	jz .Normal_Code
 
-	cmp dword [SessionType], 0	;CAMPAIGN
+	cmp dword [SessionType], 0  ;CAMPAIGN
 	jz .Normal_Code
 
 	jmp .Send
@@ -403,7 +401,7 @@ _Main_Loop_Send_Statistics_Spawner2:
 	jmp 0x0055D1B1
 
 .Normal_Code:
-	cmp dword [SessionType], 4	;INTERNET
+	cmp dword [SessionType], 4  ;INTERNET
 	jnz .Dont_Send
 
 	jmp .Send
@@ -418,7 +416,7 @@ _Main_Loop_Send_Statistics_Spawner1:
 	cmp dword [SpawnerActive], 0
 	jz .Normal_Code
 
-	cmp dword [SessionType], 0	;CAMPAIGN
+	cmp dword [SessionType], 0  ;CAMPAIGN
 	jz .Normal_Code
 
 	jmp .Send
@@ -430,7 +428,7 @@ _Main_Loop_Send_Statistics_Spawner1:
 	jmp 0x0055D123
 
 .Normal_Code:
-	cmp dword [SessionType], 4	;INTERNET
+	cmp dword [SessionType], 4  ;INTERNET
 	jnz .Dont_Send
 
 	jmp .Send
@@ -444,7 +442,7 @@ _Queue_AI_Multiplayer_Send_Statistics_Spawner:
 	cmp dword [SpawnerActive], 0
 	jz .Normal_Code
 
-	cmp dword [SessionType], 0	;CAMPAIGN
+	cmp dword [SessionType], 0  ;CAMPAIGN
 	jz .Normal_Code
 
 	jmp .Send
@@ -456,7 +454,7 @@ _Queue_AI_Multiplayer_Send_Statistics_Spawner:
 	jmp 0x00648310
 
 .Normal_Code:
-	cmp dword [SessionType], 4	;INTERNET
+	cmp dword [SessionType], 4  ;INTERNET
 	jnz .Dont_Send
 
 	jmp .Send
@@ -471,7 +469,7 @@ _Kick_Player_Now_Send_Statistics_Spawner:
 	cmp dword [SpawnerActive], 0
 	jz .Normal_Code
 
-	cmp dword [SessionType], 0	;CAMPAIGN
+	cmp dword [SessionType], 0  ;CAMPAIGN
 	jz .Normal_Code
 
 	jmp .Send
@@ -483,7 +481,7 @@ _Kick_Player_Now_Send_Statistics_Spawner:
 	jmp 0x0064B352
 
 .Normal_Code:
-	cmp dword [SessionType], 4	;INTERNET
+	cmp dword [SessionType], 4  ;INTERNET
 	jnz .Dont_Send
 
 	jmp .Send
@@ -494,9 +492,9 @@ _Kick_Player_Now_Send_Statistics_Spawner:
 ;///////////////////////////////////////////////////////////////////////////////
 hack 0x006C882A, 0x006C8830
 _Regester_Game_End_Time_Hack:
-    mov ecx, [0x00A8B230]       ; Scenario
-    mov ecx, [ecx+0x614]        ; Scenario.elapsedTime
-    jmp hackend
+	mov ecx, [0x00A8B230]       ; Scenario
+	mov ecx, [ecx+0x614]        ; Scenario.elapsedTime
+	jmp hackend
 
 ;///////////////////////////////////////////////////////////////////////////////
 ;// Correct Tournament game kicking
@@ -517,8 +515,8 @@ _Regester_Game_End_Time_Hack:
 ;//
 ;///////////////////////////////////////////////////////////////////////////////
 hack 0x006C73F8, 0x006C7402
-    mov ebx, [eax+0x34]         ; pHouse->Class
-    mov bl, [ebx+0x1A6]         ; pHouse->Class->MultiplayPassive
-    test bl, bl
-    jnz 0x6C7414
-    jmp hackend
+	mov ebx, [eax+0x34]         ; pHouse->Class
+	mov bl, [ebx+0x1A6]         ; pHouse->Class->MultiplayPassive
+	test bl, bl
+	jnz 0x6C7414
+	jmp hackend
