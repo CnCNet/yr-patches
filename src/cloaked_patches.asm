@@ -245,8 +245,7 @@
 
 ; Allow observers selected mirage
 @HACK 0x007467CA, _UnitClass_Cant_Target_Desguise
-	mov  ecx, [PlayerPtr]
-	cmp  [ObserverPtr], ecx
+	cmp  [ObserverPtr], edi
 	jz  0x007467FE
 
 .Normal_Code:
