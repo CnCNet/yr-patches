@@ -43,6 +43,7 @@ EXE_OBJS = \
 		src/ra2mode_fixes.o \
 		src/chrono_patches.o \
 		src/ports_from_ares.o \
+		src/isomappack5_limit_extend.o \
 		src/high_res_fix.o \
 		src/disable_edge_scrolling.o \
 		src/fix_common_crashes.o \
