@@ -998,3 +998,16 @@ hack 0x004430B6, 0x004430BC
     jz   0x0044328E
 
     jmp  hackend
+
+;;; Skip Crawls check on InfantryType
+;;; https://github.com/CnCNet/yr-patches/issues/15
+hack 0x0051D77A
+    cmp byte[Ra2Mode], 0
+    jz  .Reg
+
+    jmp 0x0051D793
+
+.Reg:
+    cmp edi, 5
+    jnz 0x0051D793
+    jmp hackend
