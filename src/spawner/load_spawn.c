@@ -211,6 +211,10 @@ bool __fastcall Pre_Scenario_Load_Wait()
 }
 */
 
+extern bool MPDEBUG;
+extern bool MPDEBUG1;
+extern bool MPSYNCDEBUG;
+
 signed int Initialize_Spawn()
 {
     int32_t result;
@@ -259,6 +263,9 @@ signed int Initialize_Spawn()
         SkipScoreScreen =INIClass__GetBool(&INIClass_SPAWN, "Settings", "SkipScoreScreen", SkipScoreScreen);
         Tournament =     INIClass__GetInt(&INIClass_SPAWN, "Settings", "Tournament", 0);
         QuickMatch =     INIClass__GetBool(&INIClass_SPAWN, "Settings", "QuickMatch", false);
+        if (QuickMatch)
+            MPSYNCDEBUG = MPDEBUG1 = MPDEBUG = false;
+
         RunAutoSS  =     INIClass__GetBool(&INIClass_SPAWN, "Settings", "RunAutoSS", false);
         ConnTimeout =    INIClass__GetInt(&INIClass_SPAWN, "Settings", "ConnTimeout", 3600);
         ReconnectTimeout=INIClass__GetInt(&INIClass_SPAWN, "Settings", "ReconnectTimeout", 2400);
