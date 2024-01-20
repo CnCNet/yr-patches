@@ -14,9 +14,9 @@
 #include "cursor.rch"
 
 #define SUBTITLE     CnCNet5 Spawner
-#define HARD_VERSION 1,3,5,0
-#define SOFT_VERSION 1.35
-#define YEAR         2023
+#define HARD_VERSION 1,3,6,0
+#define SOFT_VERSION 1.36
+#define YEAR         2024
 #define ABBREVIATION Spawner
 
 #include "version.rch"
