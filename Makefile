@@ -23,7 +23,6 @@ EXE_OBJS = \
 		src/graphics-patch.o \
 		src/copy-protection.o \
 		src/multi_spectators_hack.o \
-		src/cloaked_patches.o \
 		src/absolute_prism_bug_fix.o \
 		src/self_spy_exploit_fix.o \
 		src/invisible_mcv_exploit_fix.o \
@@ -58,7 +57,6 @@ DLL_OBJS = src/ares.o \
 		src/mods/saved_games_in_subdir.o \
 		src/loading_dll.o \
 		src/multi_spectators_hack.o \
-		src/cloaked_patches.o \
 		src/fix_mouse_not_found_error.o \
 		src/video_mode_hack.o \
 		src/type_select_hacks.o \
