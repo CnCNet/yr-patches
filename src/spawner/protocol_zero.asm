@@ -15,7 +15,7 @@ hack 0x00647BEB, 0x00647BF4           ;Queue_AI_Multiplayer
     jmp hackend
 
 ; Don't subtract 10 from MaxAhead
-hack 0x004C800C,                       ;EventClass::Execute->TIMING
+hack 0x004C800C                       ;EventClass::Execute->TIMING
     mov eax,[0x00A8B230] ; Scenario
 
     cmp byte[UseProtocolZero], 0
