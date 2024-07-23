@@ -3,6 +3,7 @@ typedef struct SessionClass {
 } SessionClass;
 
 extern SessionClass SessionClass_this;
+extern bool SessionClass_ChatEnabled[8];
 
 void __thiscall SessionClass__Read_Scenario_Descriptions(SessionClass *this);
 void __thiscall SessionClass__Create_Connections(SessionClass *this);

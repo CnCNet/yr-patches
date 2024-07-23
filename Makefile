@@ -75,6 +75,7 @@ SPAWNER_OBJS = \
 		src/custom_connection_timeout.o \
 		src/Hook_Main_Loop.o \
 		src/spawner/add_player_node.o \
+		src/spawner/chat_ignore.o \
 		src/spawner/coop.o \
 		src/spawner/load_spawn.o \
 		src/spawner/predetermined_alliances.o \

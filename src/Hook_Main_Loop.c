@@ -1,4 +1,5 @@
 #include "macros/patch.h"
+#include "macros/helpers.h"
 #include "RA.h"
 #include "SessionClass.h"
 #include "network.h"
@@ -41,6 +42,13 @@ MainLoop_AfterRender(void *message_list)
             ResponseTimeFrame = Frame + ResponseTimeInterval;
             Send_Response_Time();
         }
-    }
 
+        if (DisableChat)
+        {
+            for (int i = 0; i < countof(SessionClass_ChatEnabled); i++)
+            {
+                SessionClass_ChatEnabled[i] = false;
+            }
+        }
+    }
 }

@@ -22,6 +22,7 @@ extern bool QuickMatch;
 extern bool RunAutoSS;
 extern bool DoingAutoSS;
 extern bool UsePNG;
+extern bool DisableChat;
 
 void *new(int32_t size);
 void __thiscall ScenarioClass_ReadLightingAndBasic(void *this, void *ini);
@@ -43,5 +44,5 @@ void __thiscall ScreenCaptureCommandClass_Execute();
 typedef void MessageListClass;
 extern MessageListClass *MessageListClass_this;
 void __thiscall MessageListClass__Manage(MessageListClass *message_list);
-void __thiscall MessageListClass__Add_Message(MessageListClass *this, const wchar_t *Name, int ID,
-                                              const wchar_t *message, int color, int32_t PrintType, int32_t duration, bool SinglePlayer);
+void* __thiscall MessageListClass__Add_Message(MessageListClass *this, const wchar_t *Name, int ID,
+                                               const wchar_t *message, int color, int32_t PrintType, int32_t duration, bool SinglePlayer);

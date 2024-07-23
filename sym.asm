@@ -27,6 +27,7 @@ setcglob 0x007E1280, _imp__GetCommandLineA
 setcglob 0x007E1460, _imp__MessageBoxA
 setcglob 0x004C8FE0, PrintException
 setcglob 0x007CA489, wcscpy
+setcglob 0x007DD0F8, wcsicmp
 setcglob 0x007E11F0, _imp__Sleep
 setcglob 0x007E13EC, _imp__GetSystemMetrics
 
@@ -159,6 +160,7 @@ setcglob 0x00A8B26C, MultiEngineer
 setcglob 0x00A8B394, PlayerColor
 setcglob 0x00A8B23C, GameMode
 setcglob 0x008871E0, RulesData
+setcglob 0x00A8D108, SessionClass_ChatEnabled
 
 setcglob 0x0061f210, Game_LoadPCXFiles
 setcglob 0x00600560, InitCommonDialogStuff
