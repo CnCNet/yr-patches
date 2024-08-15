@@ -1,4 +1,5 @@
 #include "macros/patch.h"
+#include "macros/helpers.h"
 #include "RA.h"
 #include "SessionClass.h"
 #include "network.h"
@@ -41,6 +42,17 @@ MainLoop_AfterRender(void *message_list)
             ResponseTimeFrame = Frame + ResponseTimeInterval;
             Send_Response_Time();
         }
-    }
 
+        /* Disable "ENTER" chat for all users. Grey out the "Chat" checkbox in alliances menu.
+           TODO: This is redundant because patches in chat_disable.asm already prevent sending all message types.
+           This exists mainly for cosmetic purposes. A better solution would be to patch the function responsible for
+           toggling the chat checkbox. */
+        if (DisableChat)
+        {
+            for (int i = 0; i < countof(SessionClass_ChatEnabled); i++)
+            {
+                SessionClass_ChatEnabled[i] = false;
+            }
+        }
+    }
 }

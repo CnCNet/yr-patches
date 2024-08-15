@@ -10,6 +10,7 @@
 #include "macros/patch.h"
 
 #include "INIClass.h"
+#include "RA.h"
 
 CALL(0x006BC0DC, _read_extra_options);
 
@@ -64,6 +65,7 @@ read_extra_options(INIClass *old_INI, const char *section, const char *key, bool
         Win8Compat              = INIClass__GetBool(&RA2md_INI, "Options", "Win8Compat", false);
 
         SingleProcAffinity      = INIClass__GetBool(&RA2md_INI, "Options", "SingleProcAffinity", true);
+        DisableChat             = INIClass__GetBool(&RA2md_INI, "Options", "DisableChat", false);
         SetSingleProcAffinity();
 
         HMODULE hDDraw = LoadLibraryA("ddraw.dll");

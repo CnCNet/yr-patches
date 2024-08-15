@@ -269,6 +269,8 @@ signed int Initialize_Spawn()
         RunAutoSS  =     INIClass__GetBool(&INIClass_SPAWN, "Settings", "RunAutoSS", false);
         ConnTimeout =    INIClass__GetInt(&INIClass_SPAWN, "Settings", "ConnTimeout", 3600);
         ReconnectTimeout=INIClass__GetInt(&INIClass_SPAWN, "Settings", "ReconnectTimeout", 2400);
+        if (!DisableChat)
+            DisableChat = INIClass__GetBool(&INIClass_SPAWN, "Settings", "DisableChat", false);
 
         INIClass__GetString(&INIClass_SPAWN, "Settings", "MapHash", "", MapHash, 255);
         INIClass__GetString(&INIClass_SPAWN, "Settings", "UIMapName", "", UIMapName, 255);

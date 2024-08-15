@@ -21,10 +21,15 @@ typedef struct HouseTypeClass_vtable {
     int (__thiscall *Read_INI)(HouseType *houseType, INIClass *ini);
 } HouseTypeClass_vtable;
 
+// Size = 0x160b8
+#pragma pack(push, 1)
 typedef struct HouseClass {
     char gap[0x30];
     int ArrayIndex;
+    char gap2[0x15ff6];
+    wchar_t UIName[21];
 } HouseClass;
+#pragma pack(pop)
 
 extern HouseClass *PlayerPtr;
 HouseType **HouseTypeClassArray;
