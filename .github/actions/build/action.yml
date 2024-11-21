@@ -77,7 +77,7 @@ runs:
       Move-Item -Path 'cncnet-spawn.dll' -Destination 'artifact\debug\cncnet-hardened\cncnet5.dll'
 
   - name: Upload Artifact
-    uses: actions/upload-artifact@v2
+    uses: actions/upload-artifact@v4
     with:
       name: yr-patches-${{github.sha}}.zip
       path: artifact/**
