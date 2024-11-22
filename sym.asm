@@ -170,6 +170,9 @@ setcglob 0x0052F620, Parse_Command_Line
 ;CCHyper 18.06.2015
 setcglob 0x00A8B31C, AlliesAllowed
 
+setcglob 0x00A8D110, LANTaunts
+setcglob 0x00A8D111, WOLTaunts
+
 ; Network
 setcglob 0x00841F30, ListenPort
 setcglob 0x004A1D50, CRC_DWORD

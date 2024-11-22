@@ -50,6 +50,7 @@ EXE_OBJS = \
 		src/single-proc-affinity.o \
 		src/online_optimizations.o \
 		src/rage_quit.o \
+		src/silent_cheer.o \
 		res/res.o \
 		sym.o
 
