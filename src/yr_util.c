@@ -41,7 +41,9 @@ hook_wwdebug_printf(char const *fmt, ...)
     return;
   LPDWORD ret;
 
-  WriteConsole(h,wwdebug_buf,len, 0, 0);
+  // In some terminals (e.g., mintty from Git-Bash), "WriteConsole(h, ...)"
+  //   writes NOTHING because "GetFileType(h) == FILE_TYPE_PIPE".
+  WriteFile(h,wwdebug_buf,len, 0, 0);
   return;
 }
 
