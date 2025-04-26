@@ -20,14 +20,14 @@ hook_wwdebug_printf(char const *fmt, ...)
   va_list ap;
   va_start(ap,fmt);
   static bool already_consoled = false;
+  static HANDLE h = 0;
 
   if (!already_consoled) {
     AllocConsole();
     already_consoled = true;
+    h = GetStdHandle(STD_OUTPUT_HANDLE);
     WWDebug_Printf("Allocated the console\n");
   }
-
-  HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 
   size_t fmt_len = strnlen(fmt,99);
 
