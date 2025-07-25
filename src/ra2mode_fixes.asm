@@ -471,8 +471,8 @@ hack 0x0052CCCD
 
 
 
-StringZ ART_INI, "ART.INI"
-;;; 0000:00826254 0000000A C ARTMD.INI
+StringZ ART_INI, "ARTRA2.INI"
+;;; 0000:00826254 0000000A C ARTMD.INI ; Attempt to read new art file for ra2mode, shipped with CnCNet
 hack 0x0052D033
     cmp byte[Ra2Mode], 0
     jz  .Reg
