@@ -471,13 +471,13 @@ hack 0x0052CCCD
 
 
 
-StringZ ART_INI, "ART.INI"
+StringZ ARTRA2_INI, "ARTRA2.INI"
 ;;; 0000:00826254 0000000A C ARTMD.INI
 hack 0x0052D033
     cmp byte[Ra2Mode], 0
     jz  .Reg
 
-    push str_ART_INI
+    push str_ARTRA2_INI
     jmp  hackend
 
  .Reg:
@@ -488,7 +488,7 @@ hack 0x00679EE0
     cmp byte[Ra2Mode], 0
     jz  .Reg
 
-    push str_ART_INI
+    push str_ARTRA2_INI
     jmp  hackend
 
  .Reg:
