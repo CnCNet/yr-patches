@@ -13,7 +13,7 @@ setcglob 0x004068E0, WWDebug_Printf
 setcglob 0x00A8ED6B, Debug_Map
 
 setcglob 0x007E12CC, _imp__GetStdHandle
-setcglob 0x007E1344, _imp__WriteConsoleA
+setcglob 0x007E11A0, _imp__WriteFile
 setcglob 0x007E1218, _imp__AllocConsole
 setcglob 0x007E11A8, _imp__GetModuleFileNameA
 setcglob 0x007E11A4, _imp__GetCurrentProcess_hack
