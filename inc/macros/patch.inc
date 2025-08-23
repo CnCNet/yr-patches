@@ -26,6 +26,12 @@
     %endif
 %endmacro
 
+; Convenience macro to overwrite a null-terminated ASCII string at an absolute address
+; Usage: SETSTRING <addr>, "STRING"
+%macro SETSTRING 2
+    @SET %1, { db %2, 0 }
+%endmacro
+
 %macro @ENDPATCH 0
     %ifctx __patch
       %$end:

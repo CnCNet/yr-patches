@@ -51,6 +51,7 @@ EXE_OBJS = \
 		src/online_optimizations.o \
 		src/rage_quit.o \
 		src/silent_cheer.o \
+		src/artyr_ini_patch.o \
 		res/res.o \
 		sym.o
 
