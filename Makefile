@@ -76,6 +76,7 @@ DLL_OBJS = src/ares.o \
 SPAWNER_OBJS = \
 		src/custom_connection_timeout.o \
 		src/Hook_Main_Loop.o \
+		src/hide_fps_slider.o \
 		src/spawner/add_player_node.o \
 		src/spawner/chat_ignore.o \
 		src/spawner/coop.o \

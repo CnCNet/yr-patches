@@ -55,20 +55,6 @@
 	jmp 0x004FC9E6
 @ENDHACK
 
-@HACK 0x004E20BA, _Dlg_Stuff_Show_Gamespeed_Slider_Skirmish_Spectator
-	cmp dword [SessionType], 5
-	jnz .Normal_Code
-
-	cmp dword [ObserverMode], 1
-	jnz .Normal_Code
-
-	jmp 0x004E211A
-
-.Normal_Code:
-	mov eax, dword [0x00A8B538]
-	jmp 0x004E20BF
-@ENDHACK
-
 @HACK 0x005533EA, _Select_Load_Screen_Skirmish_Spectator
 	cmp dword [SessionType], 5
 	jnz .Normal_Code
