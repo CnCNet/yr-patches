@@ -3,11 +3,11 @@
 %include "macros/string.inc"
 
 %include "session.inc"
+cextern HideFPSSlider
 
 ; Prevent losing/winning in skirmish spectator mode
 ; And allow skirmish spectators to control gamespeed
 ; Show observer loading screen for skirmish spectators
-; TODO: Allow multiple spectators to watch an AI fight in multiplayer
 @HACK 0x004FCBD0, _HouseClass__Flag_To_Lose_Skirmsh_Spectator_Patch
 	cmp dword [SessionType], 5
 	jnz .Normal_Code
@@ -53,6 +53,29 @@
 	push ebx
 	mov ebx, ecx
 	jmp 0x004FC9E6
+@ENDHACK
+
+@HACK 0x004E20BA, _Dlg_Stuff_Show_Gamespeed_Slider_Skirmish_Spectator
+	; If HideFPSSlider is enabled, hide for everyone by forcing EAX=0
+	cmp byte [HideFPSSlider], 1
+	jnz .Check_Spectator
+	xor eax, eax
+	jmp 0x004E20BF
+
+.Check_Spectator:
+	; When not hiding globally, keep original spectator force-show
+	cmp dword [SessionType], 5
+	jnz .Normal_Code
+
+	cmp dword [ObserverMode], 1
+	jnz .Normal_Code
+
+	; Force show slider for spectators (original behavior)
+	jmp 0x004E211A
+
+.Normal_Code:
+	mov eax, dword [0x00A8B538]
+	jmp 0x004E20BF
 @ENDHACK
 
 @HACK 0x005533EA, _Select_Load_Screen_Skirmish_Spectator
