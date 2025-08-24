@@ -91,7 +91,8 @@ SPAWNER_OBJS = \
 		src/spawner/selectable_handicaps.o \
 		src/spawner/selectable_spawns.o \
 		src/spawner/skip_score.o \
-		src/spawner/spectators.o
+		src/spawner/spectators.o \
+		src/hide_fps_slider.o
 
 ifndef CNCNET
 	SPAWNER_OBJS += src/spawner/nethack.o
