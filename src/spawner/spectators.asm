@@ -3,7 +3,7 @@
 %include "macros/string.inc"
 
 %include "session.inc"
-cextern HideFPSSlider
+cextern DisableGameSpeed
 
 ; Prevent losing/winning in skirmish spectator mode
 ; And allow skirmish spectators to control gamespeed
@@ -56,8 +56,8 @@ cextern HideFPSSlider
 @ENDHACK
 
 @HACK 0x004E20BA, _Dlg_Stuff_Show_Gamespeed_Slider_Skirmish_Spectator
-	; If HideFPSSlider is enabled, hide the GameSpeed (FPS) slider group (IDs 0x529/0x714/0x671)
-	cmp byte [HideFPSSlider], 1
+	; If DisableGameSpeed is enabled, hide the GameSpeed (FPS) slider group (IDs 0x529/0x714/0x671)
+	cmp byte [DisableGameSpeed], 1
 	jnz .Check_Spectator
 	; Hide gamespeed group controls
 	push 0x529
