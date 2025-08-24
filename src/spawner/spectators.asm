@@ -56,11 +56,18 @@ cextern HideFPSSlider
 @ENDHACK
 
 @HACK 0x004E20BA, _Dlg_Stuff_Show_Gamespeed_Slider_Skirmish_Spectator
-	; If HideFPSSlider is enabled, hide for everyone by forcing EAX=0
+	; If HideFPSSlider is enabled, hide the slider control and skip its initialization
 	cmp byte [HideFPSSlider], 1
 	jnz .Check_Spectator
-	xor eax, eax
-	jmp 0x004E20BF
+	; Get handle of control 0x52A (the gamespeed/FPS slider) and hide it
+	push 0x52A              ; nIDDlgItem
+	push esi                ; hDlg
+	call edi                ; GetDlgItem
+	push 0                  ; nCmdShow = SW_HIDE
+	push eax                ; hWnd
+	call ebp                ; ShowWindow
+	; Skip the slider initialization block entirely
+	jmp 0x004E215B
 
 .Check_Spectator:
 	; When not hiding globally, keep original spectator force-show
