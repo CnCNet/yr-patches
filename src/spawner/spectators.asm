@@ -97,21 +97,6 @@ cextern DisableGameSpeed
 	jmp 0x004E20BF
 @ENDHACK
 
-; Drop incoming GAMESPEED network events entirely when DisableGameSpeed is enabled
-; Disassembly context (004C794B .. 004C79FE) shows this block is within Networking_RespondToEvent's
-; case handler for GAMESPEED. We early out to the common epilogue at 0x004C79F4 to ignore it.
-@HACK 0x004C794B, _Networking_HandleEvent_GAMESPEED_Block
-	cmp byte [DisableGameSpeed], 1
-	jnz .Normal_Code
-	; Discard the event: jump to epilogue/return of this handler
-	jmp 0x004C79F4
-
-.Normal_Code:
-	; Original first instruction we overwrote, then continue
-	mov edx, [esi+7]
-	jmp 0x004C794E
-@ENDHACK
-
 @HACK 0x005533EA, _Select_Load_Screen_Skirmish_Spectator
 	cmp dword [SessionType], 5
 	jnz .Normal_Code
