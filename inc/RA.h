@@ -23,6 +23,7 @@ extern bool RunAutoSS;
 extern bool DoingAutoSS;
 extern bool UsePNG;
 extern bool DisableChat;
+extern bool DisableGameSpeed;
 
 void *new(int32_t size);
 void __thiscall ScenarioClass_ReadLightingAndBasic(void *this, void *ini);

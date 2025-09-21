@@ -3,11 +3,11 @@
 %include "macros/string.inc"
 
 %include "session.inc"
+cextern DisableGameSpeed
 
 ; Prevent losing/winning in skirmish spectator mode
 ; And allow skirmish spectators to control gamespeed
 ; Show observer loading screen for skirmish spectators
-; TODO: Allow multiple spectators to watch an AI fight in multiplayer
 @HACK 0x004FCBD0, _HouseClass__Flag_To_Lose_Skirmsh_Spectator_Patch
 	cmp dword [SessionType], 5
 	jnz .Normal_Code
@@ -56,12 +56,40 @@
 @ENDHACK
 
 @HACK 0x004E20BA, _Dlg_Stuff_Show_Gamespeed_Slider_Skirmish_Spectator
+	; If DisableGameSpeed is enabled, hide the GameSpeed (FPS) slider group (IDs 0x529/0x714/0x671)
+	cmp byte [DisableGameSpeed], 1
+	jnz .Check_Spectator
+	; Hide gamespeed group controls
+	push 0x529
+	push esi
+	call edi
+	push 0
+	push eax
+	call ebp
+	push 0x714
+	push esi
+	call edi
+	push 0
+	push eax
+	call ebp
+	push 0x671
+	push esi
+	call edi
+	push 0
+	push eax
+	call ebp
+	; Continue to initialize the remaining slider path
+	jmp 0x004E211A
+
+.Check_Spectator:
+	; When not hiding globally, keep original spectator force-show
 	cmp dword [SessionType], 5
 	jnz .Normal_Code
 
 	cmp dword [ObserverMode], 1
 	jnz .Normal_Code
 
+	; Force show slider for spectators (original behavior)
 	jmp 0x004E211A
 
 .Normal_Code:

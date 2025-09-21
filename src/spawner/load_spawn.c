@@ -185,6 +185,7 @@ int32_t ReconnectTimeout;
 bool QuickMatch = false;
 bool Ra2Mode = false;
 bool     RunAutoSS;
+bool DisableGameSpeed = false;
 
 
 int __fastcall InitGame(int argc, char **argv);
@@ -267,6 +268,7 @@ signed int Initialize_Spawn()
             MPSYNCDEBUG = MPDEBUG1 = MPDEBUG = false;
 
         RunAutoSS  =     INIClass__GetBool(&INIClass_SPAWN, "Settings", "RunAutoSS", false);
+        DisableGameSpeed =  INIClass__GetBool(&INIClass_SPAWN, "Settings", "DisableGameSpeed", false);
         ConnTimeout =    INIClass__GetInt(&INIClass_SPAWN, "Settings", "ConnTimeout", 3600);
         ReconnectTimeout=INIClass__GetInt(&INIClass_SPAWN, "Settings", "ReconnectTimeout", 2400);
         if (!DisableChat)
