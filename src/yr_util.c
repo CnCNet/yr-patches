@@ -20,14 +20,14 @@ hook_wwdebug_printf(char const *fmt, ...)
   va_list ap;
   va_start(ap,fmt);
   static bool already_consoled = false;
+  static HANDLE h = 0;
 
   if (!already_consoled) {
     AllocConsole();
     already_consoled = true;
+    h = GetStdHandle(STD_OUTPUT_HANDLE);
     WWDebug_Printf("Allocated the console\n");
   }
-
-  HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 
   size_t fmt_len = strnlen(fmt,99);
 
@@ -41,7 +41,9 @@ hook_wwdebug_printf(char const *fmt, ...)
     return;
   LPDWORD ret;
 
-  WriteConsole(h,wwdebug_buf,len, 0, 0);
+  // In some terminals (e.g., mintty from Git-Bash), "WriteConsole(h, ...)"
+  //   writes NOTHING because "GetFileType(h) == FILE_TYPE_PIPE".
+  WriteFile(h,wwdebug_buf,len, 0, 0);
   return;
 }
 
